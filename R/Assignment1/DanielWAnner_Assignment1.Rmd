@@ -1,0 +1,72 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+First we setup the libraries and the data variable, where we use read_csv to import our CSV to a machine readable format
+```{r}
+library(readr)
+library(tibble)
+
+setwd('/home/rstudio/dssa_workspace/R/Assignment1')
+data = read_csv('fish.csv')
+```
+<hr />
+<h2>Lets head() the data</h2>
+
+```{r}
+head(data)
+```
+
+<h4>What did we learn?</h4>
+Well we can see our rows and columns which show us yearly data for counties, with brown trout sizes.
+
+<hr />
+<h2>Lets dim() the data</h2>
+
+```{r}
+dim(data)
+```
+
+<h4>What did we learn?</h4>
+Well we can see that there are 5,580 rows and 8 columns.
+
+<hr />
+<h2>Lets nrow() the data</h2>
+
+```{r}
+nrow(data)
+```
+
+<h4>What did we learn?</h4>
+Well we can see that there are 5,580 rows just as dim shows us.
+
+<hr />
+<h2>Lets glimpse() the data</h2>
+
+```{r}
+glimpse(data)
+```
+
+<h4>What did we learn?</h4>
+Well we can see some more information in a different view which shows us there are 5,580 rows (just as nrow and dim showed us), as well as a little bit of data and row data types.
+
+<hr />
+<h2>Lets summary() the data</h2>
+
+```{r}
+summary(data)
+```
+
+<h4>What did we learn?</h4>
+We can see some more information about each of the fields including information about the min and max data for the years, total number and sizes.
+
+<hr />
+<h2>Lets str() the data</h2>
+
+```{r}
+str(data)
+```
+
+<h4>What did we learn?</h4>
+Str shows us a bit more information about the column types as well as some of the data. 
