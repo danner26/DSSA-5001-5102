@@ -1,0 +1,4 @@
+#!/bin/bash
+echo $(cat $1 | grep -ow '"Male"' | wc -w)' males'
+echo $(cat $1 | grep -ow '"Female"' | wc -w)' females'
+

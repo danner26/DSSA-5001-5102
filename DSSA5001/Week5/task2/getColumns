@@ -1,0 +1,2 @@
+#!/bin/bash
+head $1 -n 1 | tr , '\n' | cat -n
