@@ -1,0 +1,95 @@
+#!/bin/bash
+# Name: Daniel W. Anner
+# Date created: 10/25/2020
+# Date last modified: 10/26/2020
+# Reads in a plaintext book and does word density calculations based on the book
+# Useage: prompt$ ./book_density [-v|--verbose]
+# use -v or --verbose to print all data
+
+# Change these settings to use this script
+FILEURL="https://www.gutenberg.org/files/84/84-0.txt" #the file for the plaintext book
+FILENAME="frankenstein-main.txt" #the main files name
+FILEPATH="./frankenstein-main.txt" #the main files path
+FILESUFFIX="frankenstein_" #the suffix we should use
+FILESUFFIXSTAR="frankenstein_*" #the suffix plus a * at the end
+declare -a WORDS=("monster" "Frankenstein" "scared" "love" "hate" "and") #place the words you would like the density of in here surrounded by quotations
+
+
+#!!!!!!!!!!!!!!!!!!!!!! DO NOT CHANGE PAST THIS LINE !!!!!!!!!!!!!!!!!!!!!!#
+declare -A LINECOUNTS           #=([""]="")
+declare -A DENSITY
+declare -a WORDS=("monster" "Frankenstein" "scared" "love" "hate" "and")
+declare -a FILES=()
+######################################
+#           WGET Section
+######################################
+echo -e "\e[96m[-] Retrieving the 'Frankenstein; Or, The Modern Prometheus by Mary Wollstonecraft Shelley' book for you \e[93m"
+echo ""
+wget -O $FILENAME $FILEURL #get the file and save it with the filename in the var
+if test -f $FILEPATH; then #ensure the file is present (was downloaded)
+    echo -e "\e[32m[+] File is saved as" $(ls $FILEPATH)
+else
+    echo -e "\e[91m[!] Uh-oh.. the file was not downloaded properly. Exiting."
+    exit
+fi
+
+######################################
+#          Cleanup Section
+######################################
+echo -e "\e[96m[-] Cleaning up the file"
+sed -ir '/^\s*$/d' $FILEPATH #Delete white spaces
+echo -e "\e[96m[-] Splitting up the files into 500 lines each"
+split -l 500 $FILEPATH $FILESUFFIX #split the file into 500 lines per file
+
+echo -e "\e[96m[-] Creating hash table and outputting file length"
+#create has table with line counts for each file
+for file in $(ls $FILESUFFIXSTAR); do #loop over all of the files
+    linecount=$(wc -l < $file) #get the line counts for the file
+    echo -e "\e[32m[+] File Name:" $file "- Line Count:" $linecount
+    LINECOUNTS[$file]=$linecount #save the linecounts in a hash map: { "file_name": linecount }
+done
+
+######################################
+#          Density Section
+######################################
+echo -e "\e[96m[-] Calculating density for selected words"
+for word in ${WORDS[@]}; do #loop over the words we want to calculate density for
+    echo -e "\e[32m[+] Calculating density for" $word
+    declare -A ${word^^} #create associative array
+    declare -A tmpDensity
+    for file in $(ls $FILESUFFIXSTAR); do #loop over the files
+        density=$(bc <<< "scale=3; $(grep $word $file | wc -l)/${LINECOUNTS[$file]}") #calculate the density  ( = number of lines on which word occurs / total number of lines in file )
+        eval ${word^^}[$file]=$density #save the data to the new associative array
+    done
+    DENSITY[${word^^}]=${word^^} #add the associate array to the density array
+done
+
+if [ "$1" == "-v" ] || [ "$1" == "--verbose" ]; then
+    for word in ${!DENSITY[@]}; do #loop through the words
+        echo -e "\e[96m[-] The density for the word" $word
+        for file in $(ls $FILESUFFIXSTAR); do #loop through the files
+           eval echo $file ":" \${${DENSITY[$word]}[$file]} #display the file we are showing, and the associated density
+        done
+    done
+fi
+
+######################################
+#          Bar chart Section
+######################################
+echo -e "\e[96m[-] Printing Density in Bar Chart"
+for word in ${!DENSITY[@]}; do #loop through the words
+    echo -e "\e[96m[-] The density for the word" $word
+    echo -e "\e[32m|--------10--------20--------30--------40--------50--------60--------70--------80--------90--------100"
+    for file in $(ls $FILESUFFIXSTAR); do #loop through the files
+       eval tmp=\${${DENSITY[$word]}[$file]} #set tmp to the density in the original float format
+       printf -v tmp "%.*f\n" 2 "$tmp" >> /dev/null #save the variable rounded to 2 decimal places
+       int=$(echo $tmp*100 | bc) #multiply by 100 to get a whole number
+       int=${int%.*} #convert the float to an int
+       if [ $int > 0 ]; then #make sure it is larger than 0
+           printf "%0.s|" $(eval echo "{1..$int}") #print the number of bars
+       fi
+       echo ""
+       #eval echo $file ":" \${${DENSITY[$word]}[$file]} #display the file we are showing, and the associated density
+    done
+    echo -e "\e[32m|--------10--------20--------30--------40--------50--------60--------70--------80--------90--------100"
+done
