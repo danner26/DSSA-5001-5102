@@ -74,6 +74,7 @@ for word in ${!DENSITY[@]}; do #loop through the words
     for file in $(ls $FILESUFFIXSTAR); do #loop through the files
        eval tmp=\${${DENSITY[$word]}[$file]}
        printf -v tmp "%.*f\n" 2 "$tmp" >> /dev/null
+#       let "normalized = $tmp * 100"
        int=$(echo $tmp*100 | bc)
        int=${int%.*}
        if [ $int > 0 ]; then

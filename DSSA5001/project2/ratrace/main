@@ -1,15 +1,15 @@
 #!/bin/bash
 #use -v or --verbose to print all data
 
-FILEURL="https://www.gutenberg.org/files/84/84-0.txt"
-FILENAME="frankenstein-main.txt"
-FILEPATH="./frankenstein-main.txt"
-FILESUFFIX="frankenstein_"
-FILESUFFIXSTAR="frankenstein_*"
+FILEURL="https://www.gutenberg.org/cache/epub/51854/pg51854.txt"
+FILENAME="ratrace-main.txt"
+FILEPATH="./ratrace-main.txt"
+FILESUFFIX="ratrace_"
+FILESUFFIXSTAR="ratrace_*"
 
 declare -A LINECOUNTS           #=([""]="")
 declare -A DENSITY
-declare -a WORDS=("monster" "Frankenstein" "scared" "love" "hate" "and")
+declare -a WORDS=("rat" "and" "scared" "you" "I" "cold")
 declare -a FILES=()
 ######################################
 #           WGET Section
@@ -74,6 +74,7 @@ for word in ${!DENSITY[@]}; do #loop through the words
     for file in $(ls $FILESUFFIXSTAR); do #loop through the files
        eval tmp=\${${DENSITY[$word]}[$file]}
        printf -v tmp "%.*f\n" 2 "$tmp" >> /dev/null
+#       let "normalized = $tmp * 100"
        int=$(echo $tmp*100 | bc)
        int=${int%.*}
        if [ $int > 0 ]; then
