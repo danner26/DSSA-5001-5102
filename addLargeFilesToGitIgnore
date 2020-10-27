@@ -1,0 +1,2 @@
+#!/bin/bash
+find /home/dssa/dssa_workspace -size +100M | cat >> /home/dssa/dssa_workspace/.gitignore
