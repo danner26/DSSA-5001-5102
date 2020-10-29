@@ -1,0 +1,18 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+ 
+
+```{r}
+setwd("~/dssa_workspace/DSSA5001/Week8/")
+png("histogram.png")
+library(tidyverse)
+library(readr)
+library(tibble)
+```
+
+```{r}
+streams_clean <- read_csv("./data.csv")
+```
+
