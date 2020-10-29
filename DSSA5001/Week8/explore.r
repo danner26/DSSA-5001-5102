@@ -3,6 +3,7 @@
 # input using $ ./explore.r < filename.dat
 # and calculates various statistical parameters and also creates 
 # a histogram graphic.
+library(tidyverse)
 png("boxplot.png")
 d<-scan("stdin", quiet=TRUE)
 cat("Minimum = ",min(d),"\n")
@@ -12,3 +13,10 @@ cat("Mean    = ",mean(d),"\n")
 summary(d)
 stem(d)
 boxplot(d)
+
+png("histogram.png")
+streams <- read_csv(file("stdin"))
+ggplot(data = streams) +
+  geom_histogram() +
+  labs(title = "Spotify Streams",
+       x = "Streams")
