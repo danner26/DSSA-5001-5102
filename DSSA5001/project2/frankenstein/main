@@ -50,6 +50,7 @@ for word in ${WORDS[@]}; do #loop over the words we want to calculate density fo
     declare -A tmpDensity
     for file in $(ls $FILESUFFIXSTAR); do #loop over the files
         density=$(bc <<< "scale=3; $(grep $word $file | wc -l)/${LINECOUNTS[$file]}") #calculate the density  ( = number of lines on which word occurs / total number of lines in file )
+        echo $density
         eval ${word^^}[$file]=$density #save the data to the new associative array
     done
     DENSITY[${word^^}]=${word^^} #add the associate array to the density array
@@ -74,9 +75,10 @@ for word in ${!DENSITY[@]}; do #loop through the words
     for file in $(ls $FILESUFFIXSTAR); do #loop through the files
        eval tmp=\${${DENSITY[$word]}[$file]}
        printf -v tmp "%.*f\n" 2 "$tmp" >> /dev/null
-#       let "normalized = $tmp * 100"
-       int=$(echo $tmp*100 | bc)
+#       let "normalized = $tmp * 1000"
+       int=$(echo $tmp*1000 | bc)
        int=${int%.*}
+#       echo $int
        if [ $int > 0 ]; then
            printf "%0.s|" $(eval echo "{1..$int}")
        fi
