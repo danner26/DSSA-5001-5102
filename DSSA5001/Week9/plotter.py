@@ -40,4 +40,4 @@ plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsiz
 #plt.ylabel("Length & Whole Wright");
 #plt.xlabel("Diameter & Shell Weight");
 
-plt.savefig("png/abalone_data_4dimensions_" + timestr + ".png", dpi=300, bbox_inches = "tight")
+plt.savefig("png/abalone_data_4dimensions_" + timestr + ".png", bbox_inches = "tight")
