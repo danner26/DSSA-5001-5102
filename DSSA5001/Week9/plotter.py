@@ -1,4 +1,4 @@
-import matplotlib, csv, sys
+import matplotlib, csv, sys, time
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -13,4 +13,5 @@ fig.suptitle("Abalone Physical Statistics")
 plt.xlabel("Length");
 plt.ylabel("Diameter");
 
-plt.savefig('abalone_data_2dimensions.png')
+timestr = time.strftime("%H%M")
+plt.savefig("abalone_data_2dimensions_" + timestr + ".png")
