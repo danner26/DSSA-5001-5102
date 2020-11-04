@@ -12,12 +12,10 @@ df1 = df[["length", "diameter"]]
 color_dict = {'diameter': '#FF7F50', 'length': '#50FFD7'}
 
 fig, ax = plt.subplots(1,1)
-scatter = ax.scatter(df1["diameter"], df1["length"], s=10, c=[color_dict.get(x, '#333333') for x in df1.columns])
+ax.scatter(df1["diameter"], df1["length"], s=10, c=[color_dict.get(x, '#333333') for x in df1.columns], label=[color_dict.get(x, '#333333') for x in df1.columns])
 fig.suptitle("Abalone Physical Statistics")
 plt.xlabel("Diameter");
 plt.ylabel("Length");
-
-legend = ax.legend(*scatter.legend_elements(), loc="upper left", title="Data Point")
 
 #timestr = time.strftime("%H%M")
 plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
