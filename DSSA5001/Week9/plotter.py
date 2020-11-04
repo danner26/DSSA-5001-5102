@@ -14,7 +14,7 @@ df = pd.read_csv(sys.argv[1], delimiter=',', header=None, names=[ "sex", "length
 fig, ax = plt.subplots(1,1)
 ax.scatter(df["length"], df["diameter"], s=10, zorder=2, c='#FF7F50', label="Diameter (mm)") #[color_dict.get(x, '#333333') for x in df1.columns], label=[color_dict.get(x, "x") for x in df1.columns])
 fig.suptitle("Abalone Physical Statistics")
-plt.xlabel("Length");
+plt.xlabel("Length (mm)");
 plt.ylabel("Diameter (mm)");
 
 plt.legend(title="Color Legend")
@@ -34,9 +34,9 @@ ax.scatter(df["length"], df["shell_weight"], s=10, c="#50FFD7", zorder=1, label=
 plt.ylabel("MM/Grams");
 ax.legend()
 
-caption="this is a test caption"
-plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsize=12)
+plt.xlabel('''Length (mm)
 
+It is pretty clear that the longer the length, the larger the diameter in millimeters. You can also see the longer the Abalone, the greater the weight in grams. There is a slow positive growth of shell weight but the whole weight grows more exponentially.''')
 #plt.ylabel("Length & Whole Wright");
 #plt.xlabel("Diameter & Shell Weight");
 
