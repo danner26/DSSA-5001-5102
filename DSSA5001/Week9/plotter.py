@@ -26,6 +26,7 @@ color_dict = {'length': '#FF7F50', 'diameter': '#FFD750', 'whole_weight': '#50FF
 fig2, ax2 = plt.subplots(1,1)
 ax2.scatter(df[["diameter", "shell_weight"]], df[["length", "whole_weight"]], s=10, c=[color_dict.get(x, '#333333') for x in df2.columns])
 fig2.suptitle("Abalone Physical Statistics")
+ax2.legend()
 plt.ylabel("Length & Whole Wright");
 plt.xlabel("Diameter & Shell Weight");
 
