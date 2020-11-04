@@ -9,13 +9,13 @@ timestr = time.strftime("%H%M")
 df = pd.read_csv(sys.argv[1], delimiter=',', header=None, names=[ "sex", "length", "diameter", "height", "whole_weight", "shucked_weight", "viscera_weight", "shell_weight", "rings"])
 
 df1 = df[["length", "diameter"]]
-color_dict = {'diameter': '#FF7F50', 'length': '#50FFD7'}
+color_dict = {'length': '#50FFD7', 'diameter': '#FF7F50'}
 
 fig, ax = plt.subplots(1,1)
-ax.scatter(df1["diameter"], df1["length"], s=10, c=[color_dict.get(x, '#333333') for x in df1.columns], label=[color_dict.get(x, "x") for x in df1.columns])
+ax.scatter(df1["length"], df1["diameter"], s=10, c=[color_dict.get(x, '#333333') for x in df1.columns], label=[color_dict.get(x, "x") for x in df1.columns])
 fig.suptitle("Abalone Physical Statistics")
-plt.xlabel("Diameter");
-plt.ylabel("Length");
+plt.xlabel("Length");
+plt.ylabel("Diameter");
 plt.legend()
 
 #timestr = time.strftime("%H%M")
