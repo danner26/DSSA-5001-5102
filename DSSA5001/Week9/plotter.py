@@ -8,11 +8,14 @@ timestr = time.strftime("%H%M")
 
 df = pd.read_csv(sys.argv[1], delimiter=',', header=None, names=[ "sex", "length", "diameter", "height", "whole_weight", "shucked_weight", "viscera_weight", "shell_weight", "rings"])
 
+df1 = df[["length", "diameter"]]
+color_dict = {'diameter': '#FFD750', 'length': '#FF7F50'}
+
 fig, ax = plt.subplots(1,1)
-ax.scatter(df["length"], df["diameter"], s=10, c='coral')
+ax.scatter(df["diameter"], df["length"], s=10, c=[color_dict.get(x, '#333333') for x in df.columns])
 fig.suptitle("Abalone Physical Statistics")
-plt.xlabel("Length");
-plt.ylabel("Diameter");
+plt.xlabel("Diameter");
+plt.ylabel("Length");
 
 #timestr = time.strftime("%H%M")
 plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
