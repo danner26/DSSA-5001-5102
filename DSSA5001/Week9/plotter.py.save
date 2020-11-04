@@ -1,0 +1,16 @@
+import matplotlib, csv, sys
+matplotlib.use("Agg")
+from matplotlib import pyplot as plt
+import pandas as pd
+
+df = pd.read_csv(sys.argv[1])
+df.head(n=1)
+
+#fig, ax = plt.subplots(1,1)
+#ax.scatter(length, diameter, s=10, c='coral', zorder=1)
+#fig.suptitle("Abalone Physical Statistics")
+#plt.rc('font', size=200)
+#plt.xlabel("Length");
+#plt.ylabel("Diameter");
+
+#plt.savefig('abalone_data_2dimensions.png')
