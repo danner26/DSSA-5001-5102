@@ -1,0 +1,26 @@
+#! /bin/bash
+# Created By: Dr. Russel Mason
+# Edited By: Daniel W. Anner
+# Date acquired: 11/04/2020
+# Date last modified: 11/04/2020
+# Gets a list of zip data from Indego Bike Rentals and downloads the listed zip URL's
+# Useage: prompt$ ./acquire_clean_bikedata
+
+curl https://www.rideindego.com/about/data/ > bikewebdata
+grep -E -o 'http.*\.zip' bikewebdata > urls
+echo on
+
+if [ ! -d "./data" ] && [ ! -d "./data/indego_zip" ]; then
+    mkdir -p ./data/indego_zip
+fi
+
+readarray -t arr < urls
+
+cd ./data/indego_zip
+for i in "${arr[@]}"; do
+    echo $i
+    curl -O $i
+done
+
+cd ../..
+rm bikewebdata urls
