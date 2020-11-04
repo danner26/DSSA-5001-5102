@@ -39,7 +39,7 @@ caption=('''It is pretty clear that the longer the length, the larger the diamet
 You can also see the longer the Abalone, the greater the weight in grams.
 There is a slow positive growth of shell weight but the whole weight grows more exponentially.''')
 #plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsize=10)
-ax.text(0.5, 0.5, caption)
+ax.text(1, 1, caption)
 #plt.ylabel("Length & Whole Wright");
 #plt.xlabel("Diameter & Shell Weight");
 
