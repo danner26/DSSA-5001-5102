@@ -1,25 +1,32 @@
+#!/usr/bin/python
+# Name: Daniel W. Anner
+# Date created: 11/04/2020
+# Date last modified: 11/04/2020
+# Reads in a csv of Abalone data, and makes scatter plots
+# Useage: prompt$ ./plotter.py abalone.csv
+# NOTE: Testing code is being kept in this file for the sole purpose of having it as a reference for the future. The color dictionary way of coloring worked and was successful, but unnecessary for this assignment
 import matplotlib, csv, sys, time
-import sys, time
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 import pandas as pd
 
-timestr = time.strftime("%H%M")
+timestr = time.strftime("%H%M") #grab the current time to use in file names, for github image debugging
 
+#Read the data from the CSV
 df = pd.read_csv(sys.argv[1], delimiter=',', header=None, names=[ "sex", "length", "diameter", "height", "whole_weight", "shucked_weight", "viscera_weight", "shell_weight", "rings"])
 
 #df1 = df[["length", "diameter"]]
 #color_dict = {'length': '#50FFD7', 'diameter': '#FF7F50'}
 
+#create the scatter plot
 fig, ax = plt.subplots(1,1)
+#set zorder to 2 so it is at the top of the final graph
 ax.scatter(df["length"], df["diameter"], s=10, zorder=2, c='#FF7F50', label="Diameter (mm)") #[color_dict.get(x, '#333333') for x in df1.columns], label=[color_dict.get(x, "x") for x in df1.columns])
 fig.suptitle("Abalone Physical Statistics")
 plt.xlabel("Length (mm)");
 plt.ylabel("Diameter (mm)");
 
 plt.legend(title="Color Legend")
-
-#timestr = time.strftime("%H%M")
 plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
 
 #df2 = df[["length", "diameter", "whole_weight", "shell_weight"]]
@@ -41,9 +48,6 @@ You can also see the longer the Abalone,
 the greater the weight in grams.
 There is a slow positive growth of shell weight
 xbut the whole weight grows more exponentially.''')
-#plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsize=10)
 ax.text(1, 1, caption)
-#plt.ylabel("Length & Whole Wright");
-#plt.xlabel("Diameter & Shell Weight");
 
 plt.savefig("png/abalone_data_4dimensions_" + timestr + ".png", bbox_inches = "tight")
