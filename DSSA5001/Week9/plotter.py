@@ -1,29 +1,33 @@
 import matplotlib, csv, sys, time
+import sys, time
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 import pandas as pd
 
-file_name = sys.argv[1]
-df = pd.read_csv(sys.argv[1], names=[ "Sex", "Length", "Diameter", "Height", "Whole Weight", "Shucked Weight", "Viscera Weight", "Shell Weight", "Rings"])
+timestr = time.strftime("%H%M")
+
+df = pd.read_csv(sys.argv[1], delimiter=',', header=None, names=[ "sex", "length", "diameter", "height", "whole_weight", "shucked_weight", "viscera_weight", "shell_weight", "rings"])
 
 fig, ax = plt.subplots(1,1)
-ax.scatter(df["Length"], df["Diameter"], s=10, c='coral')
+ax.scatter(df["length"], df["diameter"], s=10, c='coral')
 fig.suptitle("Abalone Physical Statistics")
-#plt.rc('font', size=200)
+plt.rc('font', size=200)
 plt.xlabel("Length");
 plt.ylabel("Diameter");
 
-timestr = time.strftime("%H%M")
+#timestr = time.strftime("%H%M")
 plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
 
-df2 = df[["Length", "Diameter", "Whole Weight", "Shell Weight"]]
 
-fig, ax = plt.subplots(1,1)
-ax.scatter(df[["Diameter", "Shell Weight"]], df[["Length", "Whole Weight"]], s=10, c='coral')
-fig.suptitle("Abalone Physical Statistics")
-#plt.rc('font', size=200)
+
+
+df2 = df[["length", "diameter", "whole_weight", "shell_weight"]]
+
+fig2, ax2 = plt.subplots(1,1)
+ax2.scatter(df[["diameter", "shell_weight"]], df[["length", "whole_weight"]], s=10, c='coral')
+fig2.suptitle("Abalone Physical Statistics")
+plt.rc('font', size=200)
 plt.ylabel("Length & Whole Wright");
 plt.xlabel("Diameter & Shell Weight");
 
-timestr = time.strftime("%H%M")
 plt.savefig("png/abalone_data_4dimensions_" + timestr + ".png")
