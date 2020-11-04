@@ -25,6 +25,7 @@ print(min(diameter))
 #plt.xlim(0,1)
 #plt.ylim(0,1)
 ax.scatter(length, diameter)
+fig.suptitle('testing')
 ax.set_xlabel('Length')
 ax.set_ylabel('Diameter')
 
