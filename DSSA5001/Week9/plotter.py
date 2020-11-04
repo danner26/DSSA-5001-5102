@@ -10,8 +10,8 @@ with open(sys.argv[1], 'r') as file:
     for row in reader:
 #        if(len(row) != 9):
 #            print("abnormal")
-        length.append(row[1])
-        diameter.append(row[2])
+        length.append(float(row[1].strip('"')))
+        diameter.append(float(row[2].strip('"')))
 
 fig, ax = plt.subplots(1,1)
 print(max(length))
