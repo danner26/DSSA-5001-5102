@@ -12,7 +12,7 @@ df = pd.read_csv(sys.argv[1], delimiter=',', header=None, names=[ "sex", "length
 #color_dict = {'length': '#50FFD7', 'diameter': '#FF7F50'}
 
 fig, ax = plt.subplots(1,1)
-ax.scatter(df["length"], df["diameter"], s=10, c='#FF7F50') #[color_dict.get(x, '#333333') for x in df1.columns], label=[color_dict.get(x, "x") for x in df1.columns])
+ax.scatter(df["length"], df["diameter"], s=10, zorder=1, c='#FF7F50') #[color_dict.get(x, '#333333') for x in df1.columns], label=[color_dict.get(x, "x") for x in df1.columns])
 fig.suptitle("Abalone Physical Statistics")
 plt.xlabel("Length");
 plt.ylabel("Diameter");
