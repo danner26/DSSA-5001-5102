@@ -22,7 +22,7 @@ print(min(diameter))
 #ax.scatter(feature1, feature2)
 #plt.savefig('example.png')
 
-ax.scatter(length, diameter, s=1)
+ax.scatter(length, diameter, s=1, c='coral')
 fig.suptitle('testing')
 plt.xlabel("Length");
 plt.ylabel("Diameter");
