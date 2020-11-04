@@ -14,10 +14,16 @@ with open(sys.argv[1], 'r') as file:
         diameter.append(row[2])
 
 fig, ax = plt.subplots(1,1)
+print(max(length))
+print(min(length))
+print(max(diameter))
+print(min(diameter))
 
 #feature1 = [1,2,3,4,5,6]
 #feature2 = [3,4,5,6,5,3]
 #ax.scatter(feature1, feature2)
+plt.xlim(0,1)
+plt.ylim(0,1)
 ax.scatter(length, diameter)
 ax.set_ylabel('Length')
 ax.set_ylabel('Diameter')
