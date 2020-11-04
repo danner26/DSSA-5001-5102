@@ -17,17 +17,10 @@ print(min(length))
 print(max(diameter))
 print(min(diameter))
 
-#feature1 = [1,2,3,4,5,6]
-#feature2 = [3,4,5,6,5,3]
-#ax.scatter(feature1, feature2)
-#plt.savefig('example.png')
-
 ax.scatter(length, diameter, s=10, c='coral')
 fig.suptitle("Abalone Physical Statistics")
-plt.rc('font', size=200)
+#plt.rc('font', size=200)
 plt.xlabel("Length");
 plt.ylabel("Diameter");
-#ax.set_xlabel('Length')
-#ax.set_ylabel('Diameter')
 
-plt.savefig('abalone_data.png')
+plt.savefig('abalone_data_2dimensions.png')
