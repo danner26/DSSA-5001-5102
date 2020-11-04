@@ -29,4 +29,4 @@ plt.ylabel("Diameter");
 #ax.set_xlabel('Length')
 #ax.set_ylabel('Diameter')
 
-plt.savefig('testing.png')
+plt.savefig('abalone_data.png')
