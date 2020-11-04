@@ -34,9 +34,9 @@ ax.scatter(df["length"], df["shell_weight"], s=10, c="#50FFD7", zorder=1, label=
 plt.ylabel("MM/Grams");
 ax.legend()
 
-plt.xlabel('''Length (mm)
-
-It is pretty clear that the longer the length, the larger the diameter in millimeters. You can also see the longer the Abalone, the greater the weight in grams. There is a slow positive growth of shell weight but the whole weight grows more exponentially.''')
+plt.xlabel('Length (mm)')
+caption='It is pretty clear that the longer the length, the larger the diameter in millimeters. You can also see the longer the Abalone, the greater the weight in grams. There is a slow positive growth of shell weight but the whole weight grows more exponentially.'
+plt.figtext(0.5, 0.01, txt, wrap=True, horizontalalignment='center', fontsize=14)
 #plt.ylabel("Length & Whole Wright");
 #plt.xlabel("Diameter & Shell Weight");
 
