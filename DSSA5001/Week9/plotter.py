@@ -14,4 +14,4 @@ plt.xlabel("Length");
 plt.ylabel("Diameter");
 
 timestr = time.strftime("%H%M")
-plt.savefig("abalone_data_2dimensions_" + timestr + ".png")
+plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
