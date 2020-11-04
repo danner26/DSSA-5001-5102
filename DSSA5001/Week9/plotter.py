@@ -35,9 +35,12 @@ plt.ylabel("MM/Grams");
 ax.legend()
 
 plt.xlabel('Length (mm)')
-caption=('''It is pretty clear that the longer the length, the larger the diameter in millimeters.
-You can also see the longer the Abalone, the greater the weight in grams.
-There is a slow positive growth of shell weight but the whole weight grows more exponentially.''')
+caption=('''It is pretty clear that the longer the length,
+the larger the diameter in millimeters.
+You can also see the longer the Abalone,
+the greater the weight in grams.
+There is a slow positive growth of shell weight
+xbut the whole weight grows more exponentially.''')
 #plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsize=10)
 ax.text(1, 1, caption)
 #plt.ylabel("Length & Whole Wright");
