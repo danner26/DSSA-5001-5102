@@ -12,7 +12,7 @@ df1 = df[["length", "diameter"]]
 color_dict = {'diameter': '#FFD750', 'length': '#FF7F50'}
 
 fig, ax = plt.subplots(1,1)
-ax.scatter(df["diameter"], df["length"], s=10, c=[color_dict.get(x, '#333333') for x in df.columns])
+ax.scatter(df1["diameter"], df1["length"], s=10, c=[color_dict.get(x, '#333333') for x in df1.columns])
 fig.suptitle("Abalone Physical Statistics")
 plt.xlabel("Diameter");
 plt.ylabel("Length");
