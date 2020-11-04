@@ -16,6 +16,7 @@ ax.scatter(df1["diameter"], df1["length"], s=10, c=[color_dict.get(x, '#333333')
 fig.suptitle("Abalone Physical Statistics")
 plt.xlabel("Diameter");
 plt.ylabel("Length");
+plt.legend()
 
 #timestr = time.strftime("%H%M")
 plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
