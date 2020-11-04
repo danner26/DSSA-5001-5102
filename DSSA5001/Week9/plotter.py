@@ -35,7 +35,7 @@ plt.ylabel("MM/Grams");
 ax.legend()
 
 caption="this is a test caption"
-plt.figtext(0.5, 0.25, caption, wrap=True, horizontalalignment='center', fontsize=12)
+plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsize=12)
 
 #plt.ylabel("Length & Whole Wright");
 #plt.xlabel("Diameter & Shell Weight");
