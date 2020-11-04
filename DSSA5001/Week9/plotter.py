@@ -1,23 +1,13 @@
 import matplotlib, csv, sys
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
+import pandas as pd
 
-length = []
-diameter = []
-
-with open(sys.argv[1], 'r') as file:
-    reader = csv.reader(file)
-    for row in reader:
-        length.append(float(row[1].strip('"')))
-        diameter.append(float(row[2].strip('"')))
+file_name = sys.argv[1]
+df = pd.read_csv(sys.argv[1], names=[ "Sex", "Length", "Diameter", "Height", "Whole Weight", "Shucked Weight", "Viscera Weight", "Shell Weight", "Rings"])
 
 fig, ax = plt.subplots(1,1)
-print(max(length))
-print(min(length))
-print(max(diameter))
-print(min(diameter))
-
-ax.scatter(length, diameter, s=10, c='coral', zorder=1)
+ax.scatter(df["Length"], df["Diameter"], s=10, c='coral', zorder=1)
 fig.suptitle("Abalone Physical Statistics")
 #plt.rc('font', size=200)
 plt.xlabel("Length");
