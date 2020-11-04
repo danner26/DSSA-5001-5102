@@ -23,7 +23,7 @@ print(min(diameter))
 #plt.savefig('example.png')
 
 ax.scatter(length, diameter, s=10, c='coral')
-fig.suptitle('testing')
+fig.suptitle("Abalone Physical Statistics")
 plt.xlabel("Length");
 plt.ylabel("Diameter");
 #ax.set_xlabel('Length')
