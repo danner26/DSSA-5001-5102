@@ -8,7 +8,7 @@ extension='csv'
 all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
 
 #combine all files in the list
-combined_csv = pd.concat([pd.read_csv(f, low_memory=False) for f in all_filenames ], join='inner').fillna(NaN)
+combined_csv = pd.concat([pd.read_csv(f, low_memory=False) for f in all_filenames ], join='inner').fillna("NaN")
 #export to csv
 print(combined_csv)
 combined_csv.to_csv( "combined_csv.csv", index=False, encoding='utf-8-sig')
