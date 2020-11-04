@@ -23,7 +23,7 @@ plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
 df2 = df[["length", "diameter", "whole_weight", "shell_weight"]]
 
 fig2, ax2 = plt.subplots(1,1)
-ax2.scatter(df[["diameter", "shell_weight"]], df[["length", "whole_weight"]], s=10, c='coral')
+ax2.scatter(df[["diameter", "shell_weight"]], df[["length", "whole_weight"]], s=10, c=df[["length", "whole_weight"]])
 fig2.suptitle("Abalone Physical Statistics")
 plt.ylabel("Length & Whole Wright");
 plt.xlabel("Diameter & Shell Weight");
