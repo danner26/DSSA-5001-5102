@@ -22,9 +22,6 @@ plt.legend(title="Color Legend")
 #timestr = time.strftime("%H%M")
 plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
 
-
-
-
 #df2 = df[["length", "diameter", "whole_weight", "shell_weight"]]
 #color_dict = {'diameter': '#FF7F50', 'shell_weight': '#50FFD7', 'length': '#FFD750', 'whole_weight': '#50FF7F'}
 
@@ -36,6 +33,9 @@ ax.scatter(df["length"], df["whole_weight"], s=10, c="#50FF7F", zorder=0, label=
 ax.scatter(df["length"], df["shell_weight"], s=10, c="#50FFD7", zorder=1, label="Shell Weight (grams)")
 plt.ylabel("MM/Grams");
 ax.legend()
+
+caption="this is a test caption"
+fig.text(.5, .05, txt, ha='center')
 
 #plt.ylabel("Length & Whole Wright");
 #plt.xlabel("Diameter & Shell Weight");
