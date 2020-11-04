@@ -17,8 +17,10 @@ fig, ax = plt.subplots(1,1)
 
 #feature1 = [1,2,3,4,5,6]
 #feature2 = [3,4,5,6,5,3]
+#ax.scatter(feature1, feature2)
 ax.scatter(length, diameter)
 ax.set_ylabel('Length')
 ax.set_ylabel('Diameter')
 
+#plt.savefig('example.png')
 plt.savefig('figure.png')
