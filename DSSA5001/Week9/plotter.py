@@ -11,7 +11,6 @@ df = pd.read_csv(sys.argv[1], delimiter=',', header=None, names=[ "sex", "length
 fig, ax = plt.subplots(1,1)
 ax.scatter(df["length"], df["diameter"], s=10, c='coral')
 fig.suptitle("Abalone Physical Statistics")
-plt.rc('font', size=200)
 plt.xlabel("Length");
 plt.ylabel("Diameter");
 
@@ -26,7 +25,6 @@ df2 = df[["length", "diameter", "whole_weight", "shell_weight"]]
 fig2, ax2 = plt.subplots(1,1)
 ax2.scatter(df[["diameter", "shell_weight"]], df[["length", "whole_weight"]], s=10, c='coral')
 fig2.suptitle("Abalone Physical Statistics")
-plt.rc('font', size=200)
 plt.ylabel("Length & Whole Wright");
 plt.xlabel("Diameter & Shell Weight");
 
