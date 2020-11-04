@@ -5,10 +5,6 @@ from matplotlib import pyplot as plt
 length = []
 diameter = []
 
-font = {'family' : 'normal',
-        'weight' : 'bold',
-        'size'   : 22}
-
 with open(sys.argv[1], 'r') as file:
     reader = csv.reader(file)
     for row in reader:
@@ -28,10 +24,10 @@ print(min(diameter))
 
 ax.scatter(length, diameter, s=10, c='coral')
 fig.suptitle("Abalone Physical Statistics")
-matplotlib.rc('font', **font)
+plt.rc('font', size=20)
 plt.xlabel("Length");
 plt.ylabel("Diameter");
 #ax.set_xlabel('Length')
 #ax.set_ylabel('Diameter')
 
-plt.savefig('abalone_data2.png')
+plt.savefig('abalone_data.png')
