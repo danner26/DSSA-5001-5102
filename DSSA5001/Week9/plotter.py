@@ -31,8 +31,8 @@ plt.savefig("png/abalone_data_2dimensions_" + timestr + ".png")
 #ax2.scatter(df[["diameter", "shell_weight"]], df[["length", "whole_weight"]], s=10, c=[color_dict.get(x, '#333333') for x in df2.columns], label=df2.)
 #fig2.suptitle("Abalone Physical Statistics")
 #ax.scatter(df["whole_weight"], df["shell_weight"], c=[color_dict.get(x, '#333333') for x in df.columns])
-ax.scatter(df["length"], df["whole_weight"], c="#50FF7F")
-ax.scatter(df["length"], df["shell_weight"], c="#50FFD7")
+ax.scatter(df["length"], df["whole_weight"], c="#50FF7F", alpha=.5)
+ax.scatter(df["length"], df["shell_weight"], c="#50FFD7", alpha=.5)
 ax.legend()
 
 #plt.ylabel("Length & Whole Wright");
