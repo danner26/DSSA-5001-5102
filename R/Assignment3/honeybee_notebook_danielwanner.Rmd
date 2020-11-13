@@ -10,13 +10,11 @@ library(devtools)
 install_github("wmurphyrd/fiftystater")
 
 library(tidyverse)
-#library(tibble)
 library(readr)
 library(dplyr)
 library(fiftystater)
 library(viridis)
 library(mapproj)
-#library(ggpubr)
 setwd('/home/rstudio/dssa_workspace/R/Assignment3')
 ```
 
