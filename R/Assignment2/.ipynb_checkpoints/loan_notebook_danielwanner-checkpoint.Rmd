@@ -1,0 +1,144 @@
+---
+title: "R Assignment 2 Notebook"
+output: html_notebook
+# Analysis of LendingClub.com Data
+# Dr. Clif Baldwin
+# I downloaded data from LendingClub.com  July 25, 2019  
+# Modified by Daniel W. Anner
+# Modified on 10/26/2020
+---
+# Load any libraries you need
+```{r}
+library(tidyverse)
+library(tibble)
+library(readr)
+library(dplyr)
+library(lubridate)
+setwd('/home/rstudio/dssa_workspace/R/Assignment2')
+```
+
+# Read in the data
+```{r}
+loan <- read_csv("loans.csv")
+# or 
+#loan <- read.csv("loans.csv")
+```
+
+# Look at the data
+```{r}
+glimpse(loan)
+unique(loan$loan_status)
+```
+
+# Detect who is late?
+# In other words, what observations have the word "Late" in the loan_status field?
+```{r}
+#loan %>% filter_at(vars(loan_status), any_vars(. %in% 'Late'))
+loan %>% filter(loan_status == "Late (31-120 days)" | loan_status == "Late (16-30 days)")
+```
+#We can see there are 218 people with late loans (including all, 16-120 days)
+
+# Define a new variable (or column) to indicate whether the loan was late (0) or not late (1)
+```{r}
+loan_latestatus <- loan
+loan_latestatus$late_state = 0
+loan_latestatus <- mutate(loan_latestatus, late_state = replace(late_state, loan_status == "Late (31-120 days)", 1))
+loan_latestatus <- mutate(loan_latestatus, late_state = replace(late_state, loan_status == "Late (16-30 days)", 1))
+```
+
+# Calculate the correlation between late and annual income 
+#   Hint: use cor()
+#   Note: the parameter use="complete.obs" ignores "NA"
+```{r}
+loan_latestatus <- transform(loan_latestatus, loan_state = as.numeric(late_state))
+cor(loan_latestatus$loan_state, loan_latestatus$annual_inc, use="complete.obs")
+```
+#Very small almost non-existant coorelation
+
+
+# The emp_length field is character with some "n/a"
+# Extract just the numbers and change "n/a" to NA (hint: use parse_number())
+```{r}
+loan_latestatus$emp_length <- parse_number(loan_latestatus$emp_length, na= c("n/a", "NA"))
+```
+
+# Compute the correlation of late and years employed
+```{r}
+cor(loan_latestatus$late_state, loan_latestatus$emp_length, use="complete.obs")
+```
+#Interesting, a slightly negative correlation
+
+# Plot a histogram of annual income 
+```{r}
+ggplot(data=loan_latestatus, aes(x=annual_inc)) +
+  geom_histogram(binwidth=10000) +
+  xlim(0, max(loan_latestatus$annual_inc))
+```
+
+#A much better graph looking histogram removing the top most earners
+```{r}
+ggplot(data=loan_latestatus, aes(x=annual_inc)) +
+  geom_histogram(binwidth=10000) +
+  xlim(0,500000)
+```
+
+# Compute the summary statistics of annual income
+```{r}
+summary(loan_latestatus$annual_inc)
+```
+
+# Explore the date columns
+# You will notice they are in month-year format.
+# You can convert the string month-year to a date with 
+```{r}
+loan_latestatus$issue_d <-  parse_date_time(loan_latestatus$issue_d, "my")
+loan_latestatus$last_pymnt_d <-  parse_date_time(loan_latestatus$last_pymnt_d, "my")
+loan_latestatus$next_pymnt_d <-  parse_date_time(loan_latestatus$next_pymnt_d, "my")
+loan_latestatus$last_credit_pull_d <-  parse_date_time(loan_latestatus$last_credit_pull_d, "my")
+```
+
+# Do something with this datetime and just explore the data
+```{r}
+loan_latestatus$overdue_time <- difftime(loan_latestatus$next_pymnt_d, loan_latestatus$last_pymnt_d, units="days")
+loan_latestatus[ , c("loan_amnt", "next_pymnt_d", "last_pymnt_d", "overdue_time")]
+```
+#Made a simple table and added an overdue time column
+```{r}
+ggplot(data=loan_latestatus, aes(x=overdue_time)) +
+  geom_histogram(breaks=seq(0,100,5))
+```
+#Also made a histogram of the overdue times
+
+```{r}
+summary(loan_latestatus$issue_d)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
