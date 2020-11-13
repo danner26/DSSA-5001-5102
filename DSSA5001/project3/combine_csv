@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os, glob
+import os, glob, fileinput, datetime
 import pandas as pd
 
 
@@ -7,8 +7,20 @@ os.chdir("./data/indego_extracted")
 extension='csv'
 all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
 
-#combine all files in the list
-combined_csv = pd.concat([pd.read_csv(f, low_memory=False) for f in all_filenames ], join='inner').fillna("NaN")
-#export to csv
-print(combined_csv)
-combined_csv.to_csv( "combined_csv.csv", index=False, encoding='utf-8-sig')
+#for file in all_filenames:
+#    csv = pd.read_csv(file, parse_dates = ["start_time", "end_time"], low_memory=False)
+#    csv.head()
+#    break
+
+###combine all files in the list
+combined_csv = pd.concat([pd.read_csv(f, parse_dates = ["start_time", "end_time"], low_memory=False) for f in all_filenames ], join='inner').fillna("NA")
+###export to csv
+combined_csv.to_csv("combined.csv", index=False, encoding='utf-8-sig');
+
+for line in fileinput.input("combined.csv", inplace=True):
+    print line.replace("\N", "NA"),
+
+#combined_csv = pd.read_csv("combined.csv", parse_dates = ["start_time", "end_time"], low_memory=False)
+#combined_csv["start_time"] = pd.date_time(combined_csv["start_time"], format = '%m/%d/%Y %I:%M:%S')
+#combined_csv["end_time"] = pd.date_time(combined_csv["end_time"], format = '%m/%d/%Y %I:%M:%S')
+#combined_csv.to_csv("combined.csv", sep=",", decimal=".", encoding='utf-8', index = False)

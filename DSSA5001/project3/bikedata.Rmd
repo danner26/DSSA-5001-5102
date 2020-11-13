@@ -1,0 +1,96 @@
+---
+title: "R Notebook"
+output: html_notebook
+# Analysis of 
+# Daniel W. Anner 
+---
+
+# Load any libraries you need
+```{r message=FALSE, warning=TRUE}
+library(devtools)
+install_github("wmurphyrd/fiftystater")
+
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(fiftystater)
+library(viridis)
+library(mapproj)
+library(ggpubr)
+library(chron)
+library(lubridate)
+setwd('/home/rstudio/dssa_workspace/DSSA5001/project3')
+```
+
+# Read in the data
+```{r message=FALSE, warning=TRUE}
+bikedata <- read_csv("data/indego_extracted/combined.csv")
+```
+
+
+```{r}
+glimpse(bikedata)
+```
+
+```{r}
+as.Date("7/1/15 5:52")
+```
+
+
+```{r}
+bikedata <- transform(bikedata, start_date = as.Date(start_time))
+bikedata <- transform(bikedata, end_date = as.Date(end_time))
+bikedata <- bikedata %>% mutate(end_month = format(as.Date(end_date), "%m"))
+bikedata <- bikedata %>% mutate(duration_hrs = duration * (1 / 60))
+
+bikedata_lessthanday <- bikedata %>% filter(duration <= 1440)
+```
+
+```{r}
+#data15 <- bikedata_lessthanday %>% filter(end_date <= as.Date("2016-01-01"))
+#data15 <- data15 %>% mutate(end_month = format(as.Date(end_date), "%m"))
+
+dates <- bikedata %>% mutate(end_date = ymd(end_date)) %>%  summarise(min = format(as.Date(min(end_date)), "%Y"), max = format(as.Date(max(end_date)), "%Y"))
+
+plot <- function(dataframe, year) {
+  ggplot(dataframe, aes(x=end_month, y=duration_hrs)) +
+  geom_boxplot(aes(shape = "Mean")) +
+  labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = paste(year, "Ride Duration")) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3, fill="tomato", aes(shape = "Mean")) +
+  scale_shape_manual(values = c(23)) +
+  guides(shape = guide_legend(override.aes = list(color = c('tomato'))))
+}
+
+for (i in dates$min:dates$max) {
+  assign(paste("date", i, sep = ""), (bikedata_lessthanday %>% filter(end_date < as.Date(paste(toString(i+1), "01", "01", sep = "-")))))
+  
+  assign(
+    paste("date", i, "plot", sep = ""),
+    plot(get(paste("date", i, sep = "")), i)
+  )
+}
+```
+
+
+```{r}
+date2015plot
+date2016plot
+date2017plot
+date2018plot
+date2019plot
+date2020plot
+```
+
+
+
+
+```{r, fig.width = 12}
+break
+ggplot(date2015, aes(x=end_month, y=duration_hrs)) +
+  geom_boxplot(aes(shape = "Mean")) +
+  labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = "2015 Ride Duration") +
+  stat_summary(fun=mean, geom="point", shape=23, size=3, fill="tomato", aes(shape = "Mean")) +
+  scale_shape_manual(values = c(23)) +
+  guides(shape = guide_legend(override.aes = list(color = c('tomato'))))
+```
+

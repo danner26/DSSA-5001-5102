@@ -6,7 +6,7 @@
 # Gets a list of zip data from Indego Bike Rentals and downloads the listed zip URL's
 # Useage: prompt$ ./acquire_clean_bikedata
 
-if [ $1 == "debug" ]; then
+if [ $1 == "debug" ] || [ "$(ls -A ./data/)" ]; then
     rm -rf ./data/*
 fi
 
@@ -29,7 +29,9 @@ find ./ -name "*.zip" -exec sh -c 'unzip -o -d "../indego_extracted/" "$1"' _ {}
 
 cd ../indego_extracted/
 find ./ -not -name '*.csv' -maxdepth 1 -exec rm -rf {} \; 2> /dev/null
-for f in *\ *; do mv "$f" "${f// /_}"; done
+for f in *\ *; do 
+    mv "$f" "${f// /_}"
+done
 
 cd ../..
 rm bikewebdata urls

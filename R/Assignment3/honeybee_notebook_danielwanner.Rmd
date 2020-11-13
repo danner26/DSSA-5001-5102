@@ -15,6 +15,7 @@ library(dplyr)
 library(fiftystater)
 library(viridis)
 library(mapproj)
+library(ggpubr)
 setwd('/home/rstudio/dssa_workspace/R/Assignment3')
 ```
 
