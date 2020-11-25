@@ -12,7 +12,7 @@ library(chron)
 library(lubridate)
 library(list)
 
-setwd("/home/rstudio/dssa_workspace/DSSA5001/project3")
+#setwd("/home/rstudio/dssa_workspace/DSSA5001/project3")
 
 bikedata <- read_csv("data/indego_extracted/combined.csv")
 bikedata <- transform(bikedata, start_date = as.Date(start_time))
@@ -58,7 +58,6 @@ ggmap(USA) +
   labs(x = "", y = "", title = 
          paste("Ride Starting Locations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) +
   ggthemes::theme_map()
-print(paste(getwd(), "/images/", "StartMap.png", sep = ""))
 ggsave(paste(getwd(), "/images/", "StartMap.png", sep = ""))
 
 USA <- get_map(location = c(lon = start_lon, lat = start_lat), zoom=13, maptype = "terrain", source='google',color='color')
