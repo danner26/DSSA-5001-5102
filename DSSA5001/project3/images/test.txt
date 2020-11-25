@@ -1,0 +1,24 @@
+file '/root/dssa_workspace/DSSA5001/project3/images/StartMap.png'
+duration 1
+file '/root/dssa_workspace/DSSA5001/project3/images/EndMap.png'
+duration 5
+file '/root/dssa_workspace/DSSA5001/project3/images/PassTypes.png'
+duration 2
+file '/root/dssa_workspace/DSSA5001/project3/images/RentalDurations.png'
+duration 7
+file '/root/dssa_workspace/DSSA5001/project3/images/SingleDayRentalUsage.png'
+duration 1
+file '/root/dssa_workspace/DSSA5001/project3/images/date2015plot.png'
+duration 2
+file '/root/dssa_workspace/DSSA5001/project3/images/date2016plot.png'
+duration 5
+file '/root/dssa_workspace/DSSA5001/project3/images/date2017plot.png'
+duration 2
+file '/root/dssa_workspace/DSSA5001/project3/images/date2018plot.png'
+duration 1
+file '/root/dssa_workspace/DSSA5001/project3/images/date2019plot.png'
+duration 5
+file '/root/dssa_workspace/DSSA5001/project3/images/date2020plot.png'
+duration 10
+file '/root/dssa_workspace/DSSA5001/project3/images/date2020plot.png'
+
