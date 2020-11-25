@@ -140,3 +140,40 @@ ggplot(duration, aes(x=Var1, y=Freq)) +
          paste("Rental Durations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = ""))
 ```
 
+```{r}
+memberships <- as.data.frame(table(bikedata$passholder_type))
+ggplot(memberships, aes(x=Var1, y=Freq)) +
+  geom_bar(stat = "identity", position = 'dodge') +
+  scale_y_continuous(label=addUnits) +
+  geom_text(aes(label=prettyNum(Freq, big.mark = ",")), position=position_dodge(width=0.9), vjust=-0.25) +
+  labs(x = "Passholder Types", y = "Amount of Passes", title = 
+         paste("Pass Types (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) 
+```
+
+```{r}
+# Ref: https://5harad.com/mse125/r/visualization_code.html
+checkRange <- function(n) {
+  durationRange <- ifelse(n < 5, "1-4",  #1-4 hours
+                      ifelse(n < 9, "5-8",  # in thousands
+                          ifelse(n < 13, "9-12",  # in millions
+                                 ifelse(n < 17, "13-16", # in billions
+                                        ifelse(n < 21, "17-20", # in trillions
+                                               "21-24"
+                                        )))))
+  return(durationRange)
+}
+```
+
+
+```{r}
+daypasses <- bikedata %>% group_by(passholder_type) %>% filter(passholder_type == "Day Pass") %>% mutate(duration_hours_range = checkRange(ceiling(duration_hrs)))
+dayHours <- as.data.frame(table(daypasses$duration_hours_range))
+
+ggplot(dayHours, aes(x=Var1, y=Freq)) +
+  geom_bar(stat = "identity", position = 'dodge') +
+  scale_y_continuous(label=addUnits) +
+  geom_text(aes(label=prettyNum(Freq, big.mark = ",")), position=position_dodge(width=0.9), vjust=-0.25) +
+  labs(x = "Passholder Types", y = "Amount of Passes", title = 
+         paste("Pass Types (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) 
+```
+
