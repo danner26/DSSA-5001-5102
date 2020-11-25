@@ -28,7 +28,7 @@ plotData <- function(dataframe, year) {
     stat_summary(fun=mean, geom="point", size=3, fill="tomato", aes(shape="mean")) +
     scale_shape_manual("", values=c("mean"=23)) +
     labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = paste(year, "Ride Duration"))
-  ggsave(paste(getwd(), "/images/date", i, "plot.png", sep = ""))
+  ggsave(paste(getwd(), "/images/date", i, "plot.png", sep = ""), width = 20, height = 20, units = "cm")
 }
 
 plotList <- c()
@@ -58,7 +58,7 @@ ggmap(USA) +
   labs(x = "", y = "", title = 
          paste("Ride Starting Locations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) +
   ggthemes::theme_map()
-ggsave(paste(getwd(), "/images/", "StartMap.png", sep = ""))
+ggsave(paste(getwd(), "/images/", "StartMap.png", sep = ""), width = 20, height = 20, units = "cm")
 
 USA <- get_map(location = c(lon = start_lon, lat = start_lat), zoom=13, maptype = "terrain", source='google',color='color')
 ggmap(USA) +
@@ -67,7 +67,7 @@ ggmap(USA) +
   labs(x = "", y = "", title = 
          paste("Ride Ending Locations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) +
   ggthemes::theme_map()
-ggsave(paste(getwd(), "/images/", "EndMap.png", sep = ""))
+ggsave(paste(getwd(), "/images/", "EndMap.png", sep = ""), width = 20, height = 20, units = "cm")
 
 # Ref: https://5harad.com/mse125/r/visualization_code.html
 addUnits <- function(n) {
@@ -88,7 +88,7 @@ ggplot(duration, aes(x=Var1, y=Freq)) +
   geom_text(aes(label=prettyNum(Freq, big.mark = ",")), position=position_dodge(width=0.9), vjust=-0.25) +
   labs(x = "Rental Duration (Days)", y = "Amount of Rentals", title = 
          paste("Rental Durations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = ""))
-ggsave(paste(getwd(), "/images/", "RentalDurations.png", sep = ""))
+ggsave(paste(getwd(), "/images/", "RentalDurations.png", sep = ""), width = 20, height = 20, units = "cm")
 
 memberships <- as.data.frame(table(bikedata$passholder_type))
 ggplot(memberships, aes(x=Var1, y=Freq)) +
@@ -97,7 +97,7 @@ ggplot(memberships, aes(x=Var1, y=Freq)) +
   geom_text(aes(label=prettyNum(Freq, big.mark = ",")), position=position_dodge(width=0.9), vjust=-0.25) +
   labs(x = "Passholder Types", y = "Amount of Passes", title = 
          paste("Pass Types (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) 
-ggsave(paste(getwd(), "/images/", "PassTypes.png", sep = ""))
+ggsave(paste(getwd(), "/images/", "PassTypes.png", sep = ""), width = 20, height = 20, units = "cm")
 
 checkRange <- function(n) {
   durationRange <- ifelse(n < 5, "1-4",  #1-4 hours
@@ -119,4 +119,4 @@ ggplot(dayHours, aes(x=Var1, y=Freq)) +
   geom_text(aes(label=prettyNum(Freq, big.mark = ",")), position=position_dodge(width=0.9), vjust=-0.25) +
   labs(x = "Rental Duration (4 Hour Increments)", y = "Amount of Rentals", title = 
          paste("Single Day Rental Usage Hours (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) 
-ggsave(paste(getwd(), "/images/", "SingleDayRentalUsage.png", sep = ""))
+ggsave(paste(getwd(), "/images/", "SingleDayRentalUsage.png", sep = ""), width = 20, height = 20, units = "cm")
