@@ -1,12 +1,13 @@
 ---
 title: "R Notebook"
 output: html_notebook
-# Analysis of 
+# Analysis of bike data
 # Daniel W. Anner 
 ---
 
 # Load any libraries you need
 ```{r message=FALSE, warning=TRUE}
+#install.packages(c("devtools", "tidyverse", "readr", "dplyr", "fiftystatr", "viridis", "mapproj", "ggpubr", "ggmap", "chron", "lubridate", "list", "ggthemes))
 library(devtools)
 install_github("wmurphyrd/fiftystater")
 
@@ -17,8 +18,10 @@ library(fiftystater)
 library(viridis)
 library(mapproj)
 library(ggpubr)
+library(ggmap)
 library(chron)
 library(lubridate)
+library(list)
 setwd('/home/rstudio/dssa_workspace/DSSA5001/project3')
 ```
 
@@ -27,15 +30,9 @@ setwd('/home/rstudio/dssa_workspace/DSSA5001/project3')
 bikedata <- read_csv("data/indego_extracted/combined.csv")
 ```
 
-
 ```{r}
 glimpse(bikedata)
 ```
-
-```{r}
-as.Date("7/1/15 5:52")
-```
-
 
 ```{r}
 bikedata <- transform(bikedata, start_date = as.Date(start_time))
@@ -44,53 +41,102 @@ bikedata <- bikedata %>% mutate(end_month = format(as.Date(end_date), "%m"))
 bikedata <- bikedata %>% mutate(duration_hrs = duration * (1 / 60))
 
 bikedata_lessthanday <- bikedata %>% filter(duration <= 1440)
+glimpse(bikedata)
+glimpse(bikedata_lessthanday)
 ```
 
 ```{r}
-#data15 <- bikedata_lessthanday %>% filter(end_date <= as.Date("2016-01-01"))
-#data15 <- data15 %>% mutate(end_month = format(as.Date(end_date), "%m"))
-
 dates <- bikedata %>% mutate(end_date = ymd(end_date)) %>%  summarise(min = format(as.Date(min(end_date)), "%Y"), max = format(as.Date(max(end_date)), "%Y"))
 
-plot <- function(dataframe, year) {
+plotData <- function(dataframe, year) {
   ggplot(dataframe, aes(x=end_month, y=duration_hrs)) +
-  geom_boxplot(aes(shape = "Mean")) +
-  labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = paste(year, "Ride Duration")) +
-  stat_summary(fun=mean, geom="point", shape=23, size=3, fill="tomato", aes(shape = "Mean")) +
-  scale_shape_manual(values = c(23)) +
-  guides(shape = guide_legend(override.aes = list(color = c('tomato'))))
+  geom_boxplot() + 
+  stat_summary(fun=mean, geom="point", size=3, fill="tomato", aes(shape="mean")) +
+  scale_shape_manual("", values=c("mean"=23)) +
+  labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = paste(year, "Ride Duration")) 
 }
 
+plotList <- c()
 for (i in dates$min:dates$max) {
-  assign(paste("date", i, sep = ""), (bikedata_lessthanday %>% filter(end_date < as.Date(paste(toString(i+1), "01", "01", sep = "-")))))
-  
   assign(
-    paste("date", i, "plot", sep = ""),
-    plot(get(paste("date", i, sep = "")), i)
+      paste("date", i, sep = ""), 
+      (
+        bikedata_lessthanday %>% filter(end_date < as.Date(
+          paste(toString(i+1), "01", "01", sep = "-")
+        )
+      )
+    )
   )
+  
+  plotList[[paste("date", i, "plot", sep = "")]] <- plotData(get(paste("date", i, sep = "")), i)
 }
 ```
 
+
+```{r, fig.width = 12}
+#ggpubr::ggarrange(plotlist=plotList, ncol = 2, nrow = 1)
+for (i in dates$min:dates$max) {
+  print(plotList[paste("date", i, "plot", sep = "")])
+}
+```
 
 ```{r}
-date2015plot
-date2016plot
-date2017plot
-date2018plot
-date2019plot
-date2020plot
+register_google("AIzaSyDKtwhlFbnDQZVNGpSl36sELNF9nE6GTTs", "premium")
+#USA State map
+start_lon <- mean(bikedata_lessthanday$start_lon, na.rm = TRUE) 
+start_lat <- mean(bikedata_lessthanday$start_lat, na.rm = TRUE) 
+USA <- get_map(location = c(lon = start_lon, lat = start_lat), zoom=13, maptype = "terrain", source='google',color='color')
 ```
-
 
 
 
 ```{r, fig.width = 12}
-break
-ggplot(date2015, aes(x=end_month, y=duration_hrs)) +
-  geom_boxplot(aes(shape = "Mean")) +
-  labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = "2015 Ride Duration") +
-  stat_summary(fun=mean, geom="point", shape=23, size=3, fill="tomato", aes(shape = "Mean")) +
-  scale_shape_manual(values = c(23)) +
-  guides(shape = guide_legend(override.aes = list(color = c('tomato'))))
+ggmap(USA) +
+  geom_point(data=bikedata_lessthanday, aes(x=unlist(start_lon), y=unlist(start_lat), fill = "red", alpha = 0.8), size = 5, shape = 21) +
+  guides(fill=FALSE, alpha=FALSE, size=FALSE) +
+  labs(x = "", y = "", title = 
+         paste("Ride Starting Locations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) +
+  ggthemes::theme_map()
+
+```
+
+```{r}
+start_lon <- mean(bikedata_lessthanday$start_lon, na.rm = TRUE) 
+start_lat <- mean(bikedata_lessthanday$start_lat, na.rm = TRUE) 
+USA <- get_map(location = c(lon = start_lon, lat = start_lat), zoom=13, maptype = "terrain", source='google',color='color')
+```
+
+```{r, fig.width = 12}
+ggmap(USA) +
+  geom_point(data=bikedata_lessthanday, aes(x=unlist(end_lon), y=unlist(end_lat), fill = "red", alpha = 0.8), size = 5, shape = 21) +
+  guides(fill=FALSE, alpha=FALSE, size=FALSE) +
+  labs(x = "", y = "", title = 
+         paste("Ride Ending Locations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = "")) +
+  ggthemes::theme_map()
+```
+
+```{r}
+# Ref: https://5harad.com/mse125/r/visualization_code.html
+addUnits <- function(n) {
+  labels <- ifelse(n < 1000, n,  # less than thousands
+                   ifelse(n < 1e6, paste0(round(n/1e3), 'k'),  # in thousands
+                          ifelse(n < 1e9, paste0(round(n/1e6), 'M'),  # in millions
+                                 ifelse(n < 1e12, paste0(round(n/1e9), 'B'), # in billions
+                                        ifelse(n < 1e15, paste0(round(n/1e12), 'T'), # in trillions
+                                               'too big!'
+                                        )))))
+  return(labels)
+}
+```
+
+
+```{r}
+duration <- as.data.frame(table(bikedata$plan_duration))
+ggplot(duration, aes(x=Var1, y=Freq)) +
+  geom_bar(stat = "identity", position = 'dodge') +
+  scale_y_continuous(label=addUnits) +
+  geom_text(aes(label=prettyNum(Freq, big.mark = ",")), position=position_dodge(width=0.9), vjust=-0.25) +
+  labs(x = "Rental Duration (Days)", y = "Amount of Rentals", title = 
+         paste("Rental Durations (", format(min(bikedata$start_date), format="%Y"), " - ", format(max(bikedata$start_date), format="%Y"), ")", sep = ""))
 ```
 
