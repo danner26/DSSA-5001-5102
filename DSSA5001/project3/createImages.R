@@ -22,13 +22,19 @@ bikedata <- bikedata %>% mutate(duration_hrs = duration * (1 / 60))
 bikedata_lessthanday <- bikedata %>% filter(duration <= 1440)
 dates <- bikedata %>% mutate(end_date = ymd(end_date)) %>%  summarise(min = format(as.Date(min(end_date)), "%Y"), max = format(as.Date(max(end_date)), "%Y"))
 
+dates <- bikedata %>% mutate(end_date = ymd(end_date)) %>%  summarise(min = format(as.Date(min(end_date)), "%Y"), max = format(as.Date(max(end_date)), "%Y"))
+
+bikedata_morethanday <- bikedata %>% filter(duration >= 1440)
+
 plotData <- function(dataframe, year) {
-  ggplot(dataframe, aes(x=end_month, y=duration_hrs)) +
+  plotdata <- NULL
+  plotdata <- ggplot(dataframe, aes(x=end_month, y=duration_hrs)) +
     geom_boxplot() + 
     stat_summary(fun=mean, geom="point", size=3, fill="tomato", aes(shape="mean")) +
     scale_shape_manual("", values=c("mean"=23)) +
-    labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = paste(year, "Ride Duration"))
-  ggsave(paste(getwd(), "/images/date", i, "plot.png", sep = ""), width = 20, height = 20, units = "cm")
+    labs(x = "Month of Year", y = "Duration of Ride (Hours)", title = paste(year, "Ride Duration")) 
+  ggsave(paste(getwd(), "/images/date", i, "plot.png", sep = ""), plot=plotdata, width = 20, height = 20, units = "cm")
+  return(plotdata)
 }
 
 plotList <- c()
@@ -36,10 +42,9 @@ for (i in dates$min:dates$max) {
   assign(
     paste("date", i, sep = ""), 
     (
-      bikedata_lessthanday %>% filter(end_date < as.Date(
-        paste(toString(i+1), "01", "01", sep = "-")
-      )
-      )
+      bikedata_morethanday %>% 
+        filter(end_date < as.Date(paste(toString(i+1), "01", "01", sep = "-"))) %>% 
+        filter(end_date >= as.Date(paste(toString(i), "01", "01", sep = "-")))
     )
   )
   
