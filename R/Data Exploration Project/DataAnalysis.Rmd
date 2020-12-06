@@ -1,0 +1,147 @@
+---
+title: "Firearms Data"
+output: html_notebook
+# Analysis of firearms data
+# Daniel W. Anner 
+---
+
+```{r}
+#install.packages(c("devtools", "tidyverse", "readr", "dplyr", "fiftystatr", "viridis", "mapproj", "ggpubr", "ggmap", "chron", "lubridate", "list", "ggthemes"))
+library(devtools)
+install_github("wmurphyrd/fiftystater")
+
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(fiftystater)
+library(viridis)
+library(mapproj)
+library(ggpubr)
+library(ggmap)
+library(chron)
+library(lubridate)
+library(list)
+setwd('/home/rstudio/dssa_workspace/R/Data Exploration Project/')
+```
+
+# Read in the data
+```{r message=FALSE, warning=FALSE}
+FirearmLicenses <- read_csv("data/federal_firearms_licenses_1975-2019.csv")
+BackgroundChecks_2014 <- read_csv("data/firearm_background_checks_bystate_2014.csv")
+BackgroundChecks_2015 <- read_csv("data/firearm_background_checks_bystate_2015.csv")
+BackgroundChecks_2016 <- read_csv("data/firearm_background_checks_bystate_2016.csv")
+BackgroundChecks_2017 <- read_csv("data/firearm_background_checks_bystate_2017.csv")
+BackgroundChecks_2018 <- read_csv("data/firearm_background_checks_bystate_2018.csv")
+HomicideData_2014 <- read_csv("data/MurderVictims-2014.csv")
+HomicideData_2015 <- read_csv("data/MurderVictims-2015.csv")
+HomicideData_2016 <- read_csv("data/MurderVictims-2016.csv")
+HomicideData_2017 <- read_csv("data/MurderVictims-2017.csv")
+HomicideData_2018 <- read_csv("data/MurderVictims-2018.csv")
+```
+
+#Helper function
+```{r}
+# Ref: https://5harad.com/mse125/r/visualization_code.html
+addUnits <- function(n) {
+  labels <- ifelse(n < 1000, n,  # less than thousands
+                   ifelse(n < 1e6, paste0(round(n/1e3), 'k'),  # in thousands
+                          ifelse(n < 1e9, paste0(round(n/1e6), 'M'),  # in millions
+                                 ifelse(n < 1e12, paste0(round(n/1e9), 'B'), # in billions
+                                        ifelse(n < 1e15, paste0(round(n/1e12), 'T'), # in trillions
+                                               'too big!'
+                                        )))))
+  return(labels)
+}
+```
+
+#Total firearms plot
+```{r}
+ggplot(FirearmLicenses, aes(x=year, y=total)) +
+  geom_line() +
+  geom_point() +
+  labs(x = "Year", y = "Firearm Licenses", title = "Firearm Licenses (1975-2019)")
+```
+
+#Summation Data
+```{r}
+paste(sum(FirearmLicenses$total), "in 1975 - 2019")
+FirearmLicenses_1418 <- FirearmLicenses %>% filter(between(year, 2014, 2018))
+paste(sum(FirearmLicenses_1418$total), "in 2014 - 2018")
+```
+
+#2014 Homicide Data by State
+```{r, fig.width = 12} 
+ggplot(HomicideData_2014, aes(x=state, y=total_firearms)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
+  scale_x_discrete(label=state.abb) +
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2014)")
+```
+
+#2015 Homicide Data by State
+```{r, fig.width = 12} 
+ggplot(HomicideData_2015, aes(x=state, y=total_firearms)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
+  scale_x_discrete(label=state.abb) +
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2015)")
+```
+
+#2016 Homicide Data by State
+```{r, fig.width = 12} 
+ggplot(HomicideData_2016, aes(x=state, y=total_firearms)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
+  scale_x_discrete(label=state.abb) +
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2016)")
+```
+
+#2017 Homicide Data by State
+```{r, fig.width = 12} 
+ggplot(HomicideData_2017, aes(x=state, y=total_firearms)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
+  scale_x_discrete(label=state.abb) +
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2017)")
+```
+
+#2018 Homicide Data by State
+```{r, fig.width = 12} 
+ggplot(HomicideData_2018, aes(x=state, y=total_firearms)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
+  scale_x_discrete(label=state.abb) +
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2018)")
+```
+
+#2014 Homicide Data by State
+```{r, fig.width = 12} 
+ggplot(BackgroundChecks_2014, aes(x=State, y=Totals)) +
+  geom_bar(stat="identity") +
+  scale_x_discrete(label=state.abb) +
+  scale_y_continuous(label=addUnits) + 
+  labs(x = "State", y = "Firearm Deaths", title = "Background Checks (2014)")
+```
+
+#Merge background checks
+```{r}
+BackgroundChecks_2014 <- BackgroundChecks_2014 %>% select(State, Totals) %>% mutate(Year = 2014)
+BackgroundChecks_2015 <- BackgroundChecks_2015 %>% select(State, Totals) %>% mutate(Year = 2015)
+BackgroundChecks_2016 <- BackgroundChecks_2016 %>% select(State, Totals) %>% mutate(Year = 2016)
+BackgroundChecks_2017 <- BackgroundChecks_2017 %>% select(State, Totals) %>% mutate(Year = 2017)
+BackgroundChecks_2018 <- BackgroundChecks_2018 %>% select(State, Totals) %>% mutate(Year = 2018)
+
+Background_Checks <- bind_rows(BackgroundChecks_2014, BackgroundChecks_2015) %>% group_by(State)
+
+
+Background_Checks
+```
+
+#Background check stacked bar graph
+```{r}
+
+
+ggplot(Background_Checks, aes(x=State)) +
+  geom_col(aes(fill=State))
+```
+
