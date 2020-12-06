@@ -16,11 +16,11 @@ library(dplyr)
 library(fiftystater)
 library(viridis)
 library(mapproj)
-library(ggpubr)
 library(ggmap)
 library(chron)
 library(lubridate)
 library(list)
+library(hrbrthemes)
 setwd('/home/rstudio/dssa_workspace/R/Data Exploration Project/')
 ```
 
@@ -131,17 +131,43 @@ BackgroundChecks_2016 <- BackgroundChecks_2016 %>% select(State, Totals) %>% mut
 BackgroundChecks_2017 <- BackgroundChecks_2017 %>% select(State, Totals) %>% mutate(Year = 2017)
 BackgroundChecks_2018 <- BackgroundChecks_2018 %>% select(State, Totals) %>% mutate(Year = 2018)
 
-Background_Checks <- bind_rows(BackgroundChecks_2014, BackgroundChecks_2015) %>% group_by(State)
+Background_Checks <- bind_rows(list(BackgroundChecks_2014, BackgroundChecks_2015, BackgroundChecks_2016, BackgroundChecks_2017, BackgroundChecks_2018)) %>% arrange(State) 
 
+st_crosswalk <- tibble(State = state.name) %>%
+ bind_cols(tibble(abb = state.abb)) %>% 
+ bind_rows(tibble(State = "District of Columbia", abb = "DC")) %>% 
+ bind_rows(tibble(State = "Guam", abb = "GU")) %>% 
+ bind_rows(tibble(State = "Mariana Islands", abb = "MP")) %>% 
+ bind_rows(tibble(State = "Puerto Rico", abb = "PR")) %>% 
+ bind_rows(tibble(State = "Virgin Islands", abb = "VI"))
+Background_Checks <- left_join(Background_Checks, st_crosswalk, by = "State")
 
 Background_Checks
 ```
 
-#Background check stacked bar graph
 ```{r}
+stateAbb <- function(n) {
+  labels <- ifelse(n == "Distric of Columbia", "DC",
+                   state.abb)
+  return(labels)
+}
+```
 
 
-ggplot(Background_Checks, aes(x=State)) +
-  geom_col(aes(fill=State))
+#Background check stacked bar chart
+```{r, fig.width = 18} 
+color_table <- tibble(
+  Year = c("2014", "2015", "2016", "2017", "2018"),
+  Color = c("#246C7C", "#738E53", "#EFDA92", "#CF592D", "#C5ADB3")
+  )
+Background_Checks$Year <- factor(Background_Checks$Year, levels = color_table$Year)
+
+ggplot(Background_Checks, aes(fill=Year, x=abb, y=Totals)) + 
+  theme_modern_rc() +
+  geom_bar(position="stack", stat="identity", width=0.75, color="#C3C6C3") +
+  scale_y_continuous(label=addUnits, limits = c(0, 20000000), breaks=seq(0, 20000000, by = 1000000)) + 
+  labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and the Virgin Islands (VI).") + 
+  scale_fill_manual(values=color_table$Color) + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
