@@ -17,6 +17,7 @@ library(fiftystater)
 library(viridis)
 library(mapproj)
 library(ggmap)
+library(ggpubr)
 library(chron)
 library(lubridate)
 library(list)
@@ -57,8 +58,11 @@ addUnits <- function(n) {
 #Total firearms plot
 ```{r}
 ggplot(FirearmLicenses, aes(x=year, y=total)) +
+  theme_modern_rc() +
   geom_line() +
   geom_point() +
+  scale_y_continuous(limits = c(0, 300000), breaks=seq(0, 300000, by = 50000)) +
+  scale_x_continuous(limits = c(1975, 2020), breaks=seq(1975, 2020, by = 5)) +
   labs(x = "Year", y = "Firearm Licenses", title = "Firearm Licenses (1975-2019)")
 ```
 
@@ -70,57 +74,69 @@ paste(sum(FirearmLicenses_1418$total), "in 2014 - 2018")
 ```
 
 #2014 Homicide Data by State
-```{r, fig.width = 12} 
+```{r, fig.width = 18} 
 ggplot(HomicideData_2014, aes(x=state, y=total_firearms)) +
+  theme_modern_rc() +
   geom_bar(stat="identity") +
   scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
   scale_x_discrete(label=state.abb) +
-  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2014)")
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2014)") + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
 #2015 Homicide Data by State
-```{r, fig.width = 12} 
+```{r, fig.width = 18} 
 ggplot(HomicideData_2015, aes(x=state, y=total_firearms)) +
+  theme_modern_rc() +
   geom_bar(stat="identity") +
   scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
   scale_x_discrete(label=state.abb) +
-  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2015)")
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2015)") + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
 #2016 Homicide Data by State
-```{r, fig.width = 12} 
+```{r, fig.width = 18}  
 ggplot(HomicideData_2016, aes(x=state, y=total_firearms)) +
+  theme_modern_rc() +
   geom_bar(stat="identity") +
   scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
   scale_x_discrete(label=state.abb) +
-  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2016)")
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2016)") + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
 #2017 Homicide Data by State
-```{r, fig.width = 12} 
+```{r, fig.width = 18} 
 ggplot(HomicideData_2017, aes(x=state, y=total_firearms)) +
+  theme_modern_rc() +
   geom_bar(stat="identity") +
   scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
   scale_x_discrete(label=state.abb) +
-  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2017)")
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2017)") + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
 #2018 Homicide Data by State
-```{r, fig.width = 12} 
+```{r, fig.width = 18} 
 ggplot(HomicideData_2018, aes(x=state, y=total_firearms)) +
+  theme_modern_rc() +
   geom_bar(stat="identity") +
   scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 300)) +
   scale_x_discrete(label=state.abb) +
-  labs(x = "State", y = "Firearm Deaths", title = "Firearm Murders (2018)")
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2018)") + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
-#2014 Homicide Data by State
-```{r, fig.width = 12} 
+#2014 Background Check Data by State
+```{r, fig.width = 18} 
 ggplot(BackgroundChecks_2014, aes(x=State, y=Totals)) +
+  theme_modern_rc() +
   geom_bar(stat="identity") +
   scale_x_discrete(label=state.abb) +
   scale_y_continuous(label=addUnits) + 
-  labs(x = "State", y = "Firearm Deaths", title = "Background Checks (2014)")
+  labs(x = "State", y = "Firearm Deaths", title = "Background Checks (2014)") + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
 #Merge background checks
@@ -166,8 +182,51 @@ ggplot(Background_Checks, aes(fill=Year, x=abb, y=Totals)) +
   theme_modern_rc() +
   geom_bar(position="stack", stat="identity", width=0.75, color="#C3C6C3") +
   scale_y_continuous(label=addUnits, limits = c(0, 20000000), breaks=seq(0, 20000000, by = 1000000)) + 
-  labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and the Virgin Islands (VI).") + 
+  labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC).") + 
   scale_fill_manual(values=color_table$Color) + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+```
+
+```{r}
+SelectHomicideData_2014 <- HomicideData_2014 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2014)
+SelectHomicideData_2015 <- HomicideData_2015 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2015)
+SelectHomicideData_2016 <- HomicideData_2016 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2016)
+SelectHomicideData_2017 <- HomicideData_2017 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2017)
+SelectHomicideData_2018 <- HomicideData_2018 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2018)
+
+state <- c('Guam', 'Guam', 'Guam', 'Guam', 'Guam', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Flordia', 'Flordia', 'Flordia', 'Flordia', 'Flordia')
+total_murders <- c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+total_firearms <- c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+year <- c(2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018)
+SelectExtraHomicideData <- data.frame(state, total_murders, total_firearms, year)
+HomicideData <- bind_rows(list(SelectHomicideData_2014, SelectHomicideData_2015, SelectHomicideData_2016, SelectHomicideData_2017, SelectHomicideData_2018, SelectExtraHomicideData)) %>% arrange(state) 
+
+st_crosswalk <- tibble(state = state.name) %>%
+ bind_cols(tibble(abb = state.abb)) %>% 
+ bind_rows(tibble(state = "District of Columbia", abb = "DC")) %>% 
+ bind_rows(tibble(state = "Guam", abb = "GU")) %>% 
+ bind_rows(tibble(state = "Mariana Islands", abb = "MP")) %>% 
+ bind_rows(tibble(state = "Puerto Rico", abb = "PR")) %>% 
+ bind_rows(tibble(state = "Virgin Islands", abb = "VI"))
+HomicideData <- left_join(HomicideData, st_crosswalk, by = "state")
+
+HomicideData
+```
+
+```{r}
+pearson_correlation <- cor.test(Background_Checks$Totals, HomicideData$total_firearms, method = "pearson")
+pearson_correlation
+paste("Pearson Correlation coefficient: ", pearson_correlation$estimate)
+paste("Pearson P value: ", pearson_correlation$p.value)
+
+kendall_correlation <- cor.test(Background_Checks$Totals, HomicideData$total_firearms, method = "kendall")
+kendall_correlation
+paste("Kendall Correlation coefficient: ", kendall_correlation$estimate)
+paste("Kendall P value: ", kendall_correlation$p.value)
+
+spearman_correlation <- cor.test(Background_Checks$Totals, HomicideData$total_firearms, method = "spearman")
+spearman_correlation
+paste("Spearman Correlation coefficient: ", spearman_correlation$estimate)
+paste("Spearman P value: ", spearman_correlation$p.value)
 ```
 
