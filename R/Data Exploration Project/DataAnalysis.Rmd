@@ -64,6 +64,7 @@ ggplot(FirearmLicenses, aes(x=year, y=total)) +
   scale_y_continuous(limits = c(0, 300000), breaks=seq(0, 300000, by = 50000)) +
   scale_x_continuous(limits = c(1975, 2020), breaks=seq(1975, 2020, by = 5)) +
   labs(x = "Year", y = "Firearm Licenses", title = "Firearm Licenses (1975-2019)")
+ggsave("png/firearmlicenses_1975-2020.png")
 ```
 
 #Summation Data
@@ -82,6 +83,7 @@ ggplot(HomicideData_2014, aes(x=state, y=total_firearms)) +
   scale_x_discrete(label=state.abb) +
   labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2014)") + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+ggsave("png/firearmhomicides-2014.png")
 ```
 
 #2015 Homicide Data by State
@@ -93,6 +95,7 @@ ggplot(HomicideData_2015, aes(x=state, y=total_firearms)) +
   scale_x_discrete(label=state.abb) +
   labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2015)") + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+ggsave("png/firearmhomicides-2015.png")
 ```
 
 #2016 Homicide Data by State
@@ -104,6 +107,7 @@ ggplot(HomicideData_2016, aes(x=state, y=total_firearms)) +
   scale_x_discrete(label=state.abb) +
   labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2016)") + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+ggsave("png/firearmhomicides-2016.png")
 ```
 
 #2017 Homicide Data by State
@@ -115,6 +119,7 @@ ggplot(HomicideData_2017, aes(x=state, y=total_firearms)) +
   scale_x_discrete(label=state.abb) +
   labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2017)") + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+ggsave("png/firearmhomicides-2017.png")
 ```
 
 #2018 Homicide Data by State
@@ -126,6 +131,7 @@ ggplot(HomicideData_2018, aes(x=state, y=total_firearms)) +
   scale_x_discrete(label=state.abb) +
   labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2018)") + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+ggsave("png/firearmhomicides-2018.png")
 ```
 
 
@@ -170,6 +176,7 @@ ggplot(HomicideData, aes(fill=year, x=abb, y=total_firearms)) +
   labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and Virgin Islands (VI).") + 
   scale_fill_manual(values=color_table$Color) + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+ggsave("png/firearmhomicides_stacked_2014-2018.png")
 ```
 
 
@@ -231,6 +238,7 @@ ggplot(Background_Checks, aes(fill=Year, x=abb, y=Totals)) +
   labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and Virgin Islands (VI).") + 
   scale_fill_manual(values=color_table$Color) + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+ggsave("png/backgroundchecks_stacked-2014-2018.png")
 ```
 
 ```{r}
