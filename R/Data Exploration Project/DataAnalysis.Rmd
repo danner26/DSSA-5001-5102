@@ -128,6 +128,52 @@ ggplot(HomicideData_2018, aes(x=state, y=total_firearms)) +
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ```
 
+
+```{r}
+SelectHomicideData_2014 <- HomicideData_2014 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2014)
+SelectHomicideData_2015 <- HomicideData_2015 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2015)
+SelectHomicideData_2016 <- HomicideData_2016 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2016)
+SelectHomicideData_2017 <- HomicideData_2017 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2017)
+SelectHomicideData_2018 <- HomicideData_2018 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2018)
+
+state <- c('Guam', 'Guam', 'Guam', 'Guam', 'Guam', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Florida', 'Florida', 'Florida', 'Florida', 'Florida')
+total_murders <- c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+total_firearms <- c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+year <- c(2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018)
+SelectExtraHomicideData <- data.frame(state, total_murders, total_firearms, year)
+HomicideData <- bind_rows(list(SelectHomicideData_2014, SelectHomicideData_2015, SelectHomicideData_2016, SelectHomicideData_2017, SelectHomicideData_2018, SelectExtraHomicideData)) %>% arrange(state) 
+
+st_crosswalk <- tibble(state = state.name) %>%
+ bind_cols(tibble(abb = state.abb)) %>% 
+ bind_rows(tibble(state = "District of Columbia", abb = "DC")) %>% 
+ bind_rows(tibble(state = "Guam", abb = "GU")) %>% 
+ bind_rows(tibble(state = "Mariana Islands", abb = "MP")) %>% 
+ bind_rows(tibble(state = "Puerto Rico", abb = "PR")) %>% 
+ bind_rows(tibble(state = "Virgin Islands", abb = "VI"))
+HomicideData <- left_join(HomicideData, st_crosswalk, by = "state")
+
+HomicideData
+```
+
+#Firearm murders stacked bar chart
+```{r, fig.width = 18} 
+color_table <- tibble(
+  Year = c("2014", "2015", "2016", "2017", "2018"),
+  Color = c("#246C7C", "#738E53", "#EFDA92", "#CF592D", "#C5ADB3")
+  )
+HomicideData$year <- factor(HomicideData$year, levels = color_table$Year)
+
+ggplot(HomicideData, aes(fill=year, x=abb, y=total_firearms)) + 
+  theme_modern_rc() +
+  geom_bar(position="stack", stat="identity", width=0.75, color="#C3C6C3") +
+  scale_y_continuous(label=addUnits, limits = c(0, 7000), breaks=seq(0, 7000, by = 1000)) + 
+  labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and Virgin Islands (VI).") + 
+  scale_fill_manual(values=color_table$Color) + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+```
+
+
+
 #2014 Background Check Data by State
 ```{r, fig.width = 18} 
 ggplot(BackgroundChecks_2014, aes(x=State, y=Totals)) +
@@ -182,35 +228,9 @@ ggplot(Background_Checks, aes(fill=Year, x=abb, y=Totals)) +
   theme_modern_rc() +
   geom_bar(position="stack", stat="identity", width=0.75, color="#C3C6C3") +
   scale_y_continuous(label=addUnits, limits = c(0, 20000000), breaks=seq(0, 20000000, by = 1000000)) + 
-  labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC).") + 
+  labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and Virgin Islands (VI).") + 
   scale_fill_manual(values=color_table$Color) + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
-```
-
-```{r}
-SelectHomicideData_2014 <- HomicideData_2014 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2014)
-SelectHomicideData_2015 <- HomicideData_2015 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2015)
-SelectHomicideData_2016 <- HomicideData_2016 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2016)
-SelectHomicideData_2017 <- HomicideData_2017 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2017)
-SelectHomicideData_2018 <- HomicideData_2018 %>% select(state, total_murders, total_firearms) %>% mutate(year = 2018)
-
-state <- c('Guam', 'Guam', 'Guam', 'Guam', 'Guam', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Mariana Islands', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Puerto Rico', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Virgin Islands', 'Flordia', 'Flordia', 'Flordia', 'Flordia', 'Flordia')
-total_murders <- c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
-total_firearms <- c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
-year <- c(2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018, 2014, 2015, 2016, 2017, 2018)
-SelectExtraHomicideData <- data.frame(state, total_murders, total_firearms, year)
-HomicideData <- bind_rows(list(SelectHomicideData_2014, SelectHomicideData_2015, SelectHomicideData_2016, SelectHomicideData_2017, SelectHomicideData_2018, SelectExtraHomicideData)) %>% arrange(state) 
-
-st_crosswalk <- tibble(state = state.name) %>%
- bind_cols(tibble(abb = state.abb)) %>% 
- bind_rows(tibble(state = "District of Columbia", abb = "DC")) %>% 
- bind_rows(tibble(state = "Guam", abb = "GU")) %>% 
- bind_rows(tibble(state = "Mariana Islands", abb = "MP")) %>% 
- bind_rows(tibble(state = "Puerto Rico", abb = "PR")) %>% 
- bind_rows(tibble(state = "Virgin Islands", abb = "VI"))
-HomicideData <- left_join(HomicideData, st_crosswalk, by = "state")
-
-HomicideData
 ```
 
 ```{r}
