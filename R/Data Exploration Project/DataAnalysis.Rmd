@@ -161,19 +161,32 @@ HomicideData <- left_join(HomicideData, st_crosswalk, by = "state")
 HomicideData
 ```
 
+#2014 Homicide Data by State
+```{r, fig.width = 18} 
+ggplot(HomicideData, aes(x=state, y=total_firearms, fill=year)) +
+  theme_modern_rc() +
+  geom_boxplot(outlier.colour="red", outlier.size = 2, color="#CF592D", fill="#EFDA92") +
+  scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 100)) +
+  scale_x_discrete(label=state.abb) +
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2014)") + 
+  theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
+#ggsave("png/firearmhomicides-2014.png")
+```
+
+
 #Firearm murders stacked bar chart
 ```{r, fig.width = 18} 
 color_table <- tibble(
   Year = c("2014", "2015", "2016", "2017", "2018"),
-  Color = c("#246C7C", "#738E53", "#EFDA92", "#CF592D", "#C5ADB3")
+  Color = c("#C5ADB3", "#738E53", "#EFDA92", "#CF592D", "#246C7C")
   )
 HomicideData$year <- factor(HomicideData$year, levels = color_table$Year)
 
 ggplot(HomicideData, aes(fill=year, x=abb, y=total_firearms)) + 
   theme_modern_rc() +
-  geom_bar(position="stack", stat="identity", width=0.75, color="#C3C6C3") +
+  geom_bar(position=position_stack(reverse = TRUE), stat="identity", width=0.75, color="#C3C6C3") +
   scale_y_continuous(label=addUnits, limits = c(0, 7000), breaks=seq(0, 7000, by = 1000)) + 
-  labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and Virgin Islands (VI).") + 
+  labs(x = "State", y = "Firearm Murders", title = "Firearm Homicides (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and Virgin Islands (VI).") + 
   scale_fill_manual(values=color_table$Color) + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
 ggsave("png/firearmhomicides_stacked_2014-2018.png")
@@ -227,13 +240,13 @@ stateAbb <- function(n) {
 ```{r, fig.width = 18} 
 color_table <- tibble(
   Year = c("2014", "2015", "2016", "2017", "2018"),
-  Color = c("#246C7C", "#738E53", "#EFDA92", "#CF592D", "#C5ADB3")
+  Color = c("#C5ADB3", "#738E53", "#EFDA92", "#CF592D", "#246C7C")
   )
 Background_Checks$Year <- factor(Background_Checks$Year, levels = color_table$Year)
 
 ggplot(Background_Checks, aes(fill=Year, x=abb, y=Totals)) + 
   theme_modern_rc() +
-  geom_bar(position="stack", stat="identity", width=0.75, color="#C3C6C3") +
+  geom_bar(position=position_stack(reverse = TRUE), stat="identity", width=0.75, color="#C3C6C3") +
   scale_y_continuous(label=addUnits, limits = c(0, 20000000), breaks=seq(0, 20000000, by = 1000000)) + 
   labs(x = "State", y = "Background Checks", title = "Background Checks (2014 - 2018)", caption = "Includes District of Columbia (DC), Guam (GU), Mariana Islands (MP), Puerto Rico (PR), and Virgin Islands (VI).") + 
   scale_fill_manual(values=color_table$Color) + 
@@ -256,5 +269,14 @@ spearman_correlation <- cor.test(Background_Checks$Totals, HomicideData$total_fi
 spearman_correlation
 paste("Spearman Correlation coefficient: ", spearman_correlation$estimate)
 paste("Spearman P value: ", spearman_correlation$p.value)
+```
+
+```{r}
+bkchk_corr <- ggqqplot(Background_Checks$Totals, ylab = "Background Checks") + theme_modern_rc() + scale_y_continuous(label=addUnits, limits = c(-1000000, 5000000), breaks=seq(-1000000, 5000000, by = 1000000)) + 
+  theme(axis.text.x = element_text(vjust=0.5, hjust=1, size = 10), axis.text.y = element_text(hjust=1, size = 10), axis.title.x = element_text(hjust = 1, size = 12, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 12, color = "#7C9488"), plot.caption = element_text(size = 15))
+homicide_corr <- ggqqplot(HomicideData$total_firearms, ylab = "Firearm Homicides") + theme_modern_rc() + 
+  theme(axis.text.x = element_text(vjust=0.5, hjust=1, size = 10), axis.text.y = element_text(hjust=1, size = 10), axis.title.x = element_text(hjust = 1, size = 12, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 12, color = "#7C9488"), plot.caption = element_text(size = 15))
+cowplot::plot_grid(bkchk_corr, homicide_corr)
+ggsave("png/correlation_qqplot.png")
 ```
 
