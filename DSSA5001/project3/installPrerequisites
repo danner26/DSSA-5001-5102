@@ -1,5 +1,0 @@
-#!/bin/bash
-Rscript -e 'install.packages(c("devtools", "tidyverse", "readr", "dplyr", "fiftystatr", "viridis", "mapproj", "ggpubr", "ggmap", "chron", "lubridate", "list", "ggthemes"))'
-Rscript -e 'library(devtools); install_github("wmurphyrd/fiftystater")'
-
-mkdir images

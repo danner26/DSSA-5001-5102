@@ -1,0 +1,4 @@
+#!/bin/bash
+cd images
+
+ffmpeg -f concat -safe 0 -i test.txt -y -vf "scale=1920:1080,fps=30" -c:v libx264 output.mp4
