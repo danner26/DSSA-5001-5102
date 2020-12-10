@@ -168,9 +168,26 @@ ggplot(HomicideData, aes(x=state, y=total_firearms, fill=year)) +
   geom_boxplot(outlier.colour="red", outlier.size = 2, color="#CF592D", fill="#EFDA92") +
   scale_y_continuous(limits = c(0, 1500), breaks=seq(0, 1500, by = 100)) +
   scale_x_discrete(label=state.abb) +
-  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2014)") + 
+  labs(x = "State", y = "Firearm Deaths", title = "Firearm Related Homicides (2014-2018)") + 
   theme(plot.title = element_text(size = 30), text = element_text(size=25), axis.text.x = element_text(angle=90, vjust=0.5, hjust=1, size = 18), axis.text.y = element_text(hjust=1, size = 18), axis.title.x = element_text(hjust = 1, size = 25, color = "#7C9488"), axis.title.y = element_text(hjust = 1, size = 25, color = "#7C9488"), plot.caption = element_text(size = 15))
-#ggsave("png/firearmhomicides-2014.png")
+ggsave("png/firearmhomicides_boxppplot.png")
+```
+
+```{r}
+percent <- function(x, digits = 2, format = "f", ...) {
+  paste0(formatC(100 * x, format = format, digits = digits, ...), "%")
+}
+
+paste("2014 Firearm Murder Percent: ", percent(sum(HomicideData_2014$total_firearms) / sum(HomicideData_2014$total_murders)))
+paste("2015 Firearm Murder Percent: ", percent(sum(HomicideData_2015$total_firearms) / sum(HomicideData_2015$total_murders)))
+paste("2016 Firearm Murder Percent: ", percent(sum(HomicideData_2016$total_firearms) / sum(HomicideData_2016$total_murders)))
+paste("2017 Firearm Murder Percent: ", percent(sum(HomicideData_2017$total_firearms) / sum(HomicideData_2017$total_murders)))
+paste("2018 Firearm Murder Percent: ", percent(sum(HomicideData_2018$total_firearms) / sum(HomicideData_2018$total_murders)))
+
+total_murders <- sum(sum(HomicideData_2014$total_murders) + sum(HomicideData_2015$total_murders) + sum(HomicideData_2016$total_murders) + sum(HomicideData_2017$total_murders) + sum(HomicideData_2018$total_murders))
+total_firearms <- sum(sum(HomicideData_2014$total_firearms) + sum(HomicideData_2015$total_firearms) + sum(HomicideData_2016$total_firearms) + sum(HomicideData_2017$total_firearms) + sum(HomicideData_2018$total_firearms))
+paste("2014-2018 Firearm Murder Percent Average: ", percent(total_firearms / total_murders))
+
 ```
 
 
