@@ -188,6 +188,8 @@ total_murders <- sum(sum(HomicideData_2014$total_murders) + sum(HomicideData_201
 total_firearms <- sum(sum(HomicideData_2014$total_firearms) + sum(HomicideData_2015$total_firearms) + sum(HomicideData_2016$total_firearms) + sum(HomicideData_2017$total_firearms) + sum(HomicideData_2018$total_firearms))
 paste("2014-2018 Firearm Murder Percent Average: ", percent(total_firearms / total_murders))
 
+total_murders
+total_firearms
 ```
 
 
