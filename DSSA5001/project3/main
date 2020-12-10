@@ -1,2 +1,19 @@
 #!/bin/bash
+bash acquire_clean_bikedata
+/usr/bin/python combine_csv
+bash install_prerequisites
 
+#prompt to confirm installed
+echo
+echo
+echo "This requires that ffmpeg is installed. Please ensure it is."
+echo "This requires that the install_prerequisites completes successfully."
+echo "Do not hit yes unless it has. Rerun install_prerequisites if it did not."
+read -p "The next scripts will fail if you do not have the prerequisites installed. Are you sure they are installed?" -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+fi
+
+Rscript create_images.R
+bash create_gif
