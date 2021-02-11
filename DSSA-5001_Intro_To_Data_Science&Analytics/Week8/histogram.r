@@ -1,11 +1,3 @@
-#! /usr/bin/env Rscript
-
-png("histogram.png")
-library(tidyverse)
-library(readr)
-library(tibble)
-streams_clean <- read_csv("./data.csv")
-ggplot(data = as_tibble(streams_clean), aes(x="Streams")) +
-  geom_bar() +
-  labs(title = "Spotify Streams",
-       x = "Streams")
+version https://git-lfs.github.com/spec/v1
+oid sha256:6877affeac3a80733e46bace1ee86bc78196fdb2005c531e3784db837812e0a1
+size 278

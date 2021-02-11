@@ -1,20 +1,3 @@
-#! /usr/bin/env Rscript
-
-library(tidyverse, readr, tibble)
-library(Hmisc)
-setwd("~/dssa_workspace/DSSA5001/Week8/task2")
-
-redwine = read.csv("winequality-red_clean.csv", header = TRUE)
-whitewine = read.csv("winequality-white_clean.csv", header = TRUE)
-
-summary(redwine)
-summary(whitewine)
-
-redwine.cor = cor(redwine)
-whitewin.cor = cor(whitewine)
-
-redwine.rcorr = rcorr(as.matrix(redwine))
-redwine.rcorr
-
-whitewine.rcorr = rcorr(as.matrix(redwine))
-whitewine.rcorr
+version https://git-lfs.github.com/spec/v1
+oid sha256:aa4bedb3cef08ea32d61d4527df06535a405c4ef21c01f3e5174fe8346aa85b0
+size 485
