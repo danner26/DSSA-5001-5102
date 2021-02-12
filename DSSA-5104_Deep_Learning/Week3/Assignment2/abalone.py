@@ -55,9 +55,3 @@ abalone_dataset_third = Abalone(X, 5.1, 2.15)
 abalone_dataset_third.save_plot("third")
 #print(abalone_dataset_first.ssr_str)
 #print(abalone_dataset_first.plot)
-
-
-
-
-
-
