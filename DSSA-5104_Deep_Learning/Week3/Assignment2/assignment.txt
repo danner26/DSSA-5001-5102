@@ -1,0 +1,7 @@
+You have been given a data set of abalone diameters and weight and a python code that will read in this data and plot it. The plot will also show a model suggested by Manson ( W = 5.1D5 ).
+
+Compute how well the model fits the observations by computing the SSR. and place this value in a text box on the chart. Run your code a few times changing the values of 5.1 and 5 to other values. Show how the SSR changes.
+
+Use a Python function to compute the SSR as a function of the observed data, and the model parameters.
+
+As before submit your code and result in a pdf.
