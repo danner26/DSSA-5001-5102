@@ -34,6 +34,7 @@ class Abalone(Abalone_Data):
         return manson_model
 
     def generate_plot(self):
+        plt.clf()
         plot = plt.scatter(X[:, 0], X[:, 1], marker='o', s=150, alpha=0.5, label='Observed')
         plot = plt.scatter(X[:, 0], self.mansonmodel, marker='.', color='black',
                     label=r'Model: W=' + str(self.a) + r'D$^{' + str(self.b) + r'}$')
@@ -43,7 +44,20 @@ class Abalone(Abalone_Data):
         plot = plt.legend()
         return plot
 
+    def save_plot(self, fileprefix):
+        self.plot.get_figure().savefig("%s.png" % fileprefix)
+
 abalone_dataset_first = Abalone(X, 5.1, 5.0)
+abalone_dataset_first.save_plot("first")
+abalone_dataset_second = Abalone(X, 5.1, 2.2)
+abalone_dataset_second.save_plot("second")
+abalone_dataset_third = Abalone(X, 5.1, 2.15)
+abalone_dataset_third.save_plot("third")
 #print(abalone_dataset_first.ssr_str)
-print(abalone_dataset_first.plot)
-abalone_dataset_first.save_plot()
+#print(abalone_dataset_first.plot)
+
+
+
+
+
+
