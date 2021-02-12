@@ -26,7 +26,12 @@ aminusc = np.subtract(A, C)     # subtract matrices
 atimesc = np.matmul(A, C)       # multiply matrices
 ctimesd = np.matmul(C, D)       # multiply matrices
 
+x = np.linalg.solve(A, D)       # solve linear matrix equation
+status = np.allclose(np.dot(A, x), D)    # Ensure true
+
 print("A + C: \n%s" % aplusc)
 print("A - C: \n%s" % aminusc)
 print("AC: \n%s" % atimesc)
 print("CD: \n%s" % ctimesd)
+
+print("\n\nAx = D: \n%s\nThe solution is: %s" % (x, status))
