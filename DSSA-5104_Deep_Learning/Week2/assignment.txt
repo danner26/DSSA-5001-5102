@@ -1,0 +1,11 @@
+Using Numpy and matplotlib plot the "Loch Ness Monster" function (my name for it) . Note that some math functions such as exp and sin are found within numpy.
+
+y = 2 + e-bxsin(x)
+
+for a domain  x = 0 to 30 taking b = 0.05 and with 100 points.
+
+Repeat for b = 0.1
+
+[Requires just 5-10 lines of code]
+
+Provide your plots (with an explanation of why they look like they do) and your code in a pdf as always.
