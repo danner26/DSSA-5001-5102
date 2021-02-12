@@ -1,0 +1,7 @@
+a) For the function you plotted in task 1 compute the steepness/slope/gradient at two different x values using numerical differentiation 
+(i.e. the estimating technique). Do this twice for each, using Δx values of 0.1 and 0.01. Comment on your answers.
+
+b) Plot the function x = [0,1,2,3,4,5], y =[10,9,6,4,6,10]. Estimate the slope between x=1 and x=2 using numerical differentiation; 
+estimate the slope between x=4 and x=5.
+
+Provide code and answers in a pdf as always.
