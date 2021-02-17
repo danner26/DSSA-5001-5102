@@ -1,0 +1,50 @@
+---
+title: "Week 3 Notebook"
+output: html_notebook
+# Daniel W. Anner 
+---
+# Load any libraries you need
+```{r message=FALSE, warning=TRUE}
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(Hmisc)
+library(ggplot2)
+library(lubridate)
+setwd('C:/Users/danie/_Source/Stockton-DSSA/DSSA-5103_Data_Visualization/Week3')
+```
+
+# Read in the data
+```{r message=FALSE, warning=TRUE}
+enrollment_data <- read_csv("enrollment.csv")
+```
+
+# Look at the data
+```{r}
+glimpse(enrollment_data)
+```
+
+#Clean data
+```{r}
+enrollment_data$year <- str_replace(enrollment_data$year, '20', '')
+enrollment_data$year <- str_replace(enrollment_data$year, '-20', '-')
+```
+
+
+
+```{r message=FALSE, fig.width = 10}
+ggplot(enrollment_data, aes(x=year, y=total, group=1)) +
+  geom_smooth(method='lm', color="darkgreen", size=1.25) +
+  geom_line(size=1.25) +
+  geom_point(size=4) + 
+  
+  labs(x = "Academic Year", y = "Total Enrolled Students", title = "Student Enrollment Per Year (2007 - 2019)") +
+  theme(axis.title.y=element_text(size=16), axis.title.x=element_text(size=16), title = element_text(size=18))
+```
+
+```{r}
+fit = lm(total ~ year, data=enrollment_data)
+summary(fit)
+
+```
+
