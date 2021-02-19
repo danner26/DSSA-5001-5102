@@ -1,0 +1,146 @@
+---
+title: "KMeans Clustering"
+owner: "Daniel W. Anner"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(gridExtra)
+
+setwd('C:/Users/danie/_Source/Stockton-DSSA/DSSA-5201_Machine_Learning_Fundamentals/KMeansClustering')
+```
+
+# Algorithm
+# Step 1: Choose groups within feature plan randomly
+# Step 2: Minimize distance between cluster center and different observations. Results in groups of observations
+# Step 3: Shift initial centroid to the mean of coordinates within the group.
+# Step 4: Minimize distance according to new centroids. New boundaries are created causing observations to migrate from one group to another
+# Loop until no observation changes groups
+
+# PSEUDOCODE
+# 1. Create k points for starting centroids
+# 2. While any point has changed cluster assignment
+#       For every point in our dataset:
+#         For every centroid:
+#           Calculate the distance between the centroid and point
+#         Assign the point to the cluster with the lowest distance
+#       For every cluster calculate the mean of the points in that cluster
+#         Assign the centroid to the mean
+
+
+# NOTE: I understand while & for loops are not preferred in R, but its the best way I knew how to do this
+#KMeans
+```{r}
+kmeans_cluster <- function(data, square) {
+  centroids <- data[sample.int(nrow(data), square), ] # create k points
+  cluster <- rep(0, nrow(data)) # create equal matrix, with 0's so we can track data point
+  current_stop_val <- Inf
+  convergence <- FALSE
+  stop_val= 10e-5
+  
+  # determine if centroids stopped moving
+  while (current_stop_val >= stop_val && isFALSE(convergence)) {
+    # check if current stop value is greater than or equal to stop_val
+    sapply(current_stop_val, function(val) {
+      if (val <= stop_val) {
+        convergence <- TRUE
+      }
+    })
+    
+    previous_centroids <- centroids
+    for (data_point in 1:nrow(data)) {
+      min_distance <- Inf # set min_distance to infinity. Ensures closest euclidean distance overwrites val
+      for (centroid in 1:nrow(centroids)) {
+        euclidian_distance <- sum((centroids[centroid, ] - data[data_point, ])^2) # calculate distance between centroid and point 
+        # check closest centroid to min_distance
+        if (euclidian_distance <= min_distance) {
+          # set to cluster with lowest distance
+          cluster[data_point] <- centroid
+          min_distance <- euclidian_distance
+        }
+      }
+    }
+    
+    # Calculate mean of points in each cluster
+    for (centroid in 1:nrow(centroids)) {
+      centroids[centroid, ] <- apply(data[cluster==centroid, , drop=F], 2, mean) # find new centroids based on mean
+    }
+    
+    current_stop_val <- vapply((previous_centroids - centroids)^2, mean, FUN.VALUE=1)# Recalculate stop_val to check for centroids to stop moving
+  }
+  
+  centroids <- data.frame(centroids, cluster=1:square) # save centroids as x, y centroid
+  return(list(data=data.frame(data, cluster), centroids=centroids))
+}
+```
+
+# Compute sum of squares
+```{r}
+compute_square <- function(k_means_data, k_values) {
+  within_sum_squares <- 0.0
+ 
+  for (k_val in 1:k_values) { # for each k_values value
+    for (k_data in 1:nrow(k_means_data$data)) { # for each row
+      # if associated data point belongs to the cluster
+      if (k_means_data$data$cluster[k_data] == k_means_data$centroids$cluster[k_val]) {
+        # compute distance from cluster to data point. Add to sum
+        within_sum_squares <- within_sum_squares + 
+                              (k_means_data$data$x[k_data] - k_means_data$centroids$x[k_val])^2 + 
+                              (k_means_data$data$y[k_data] - k_means_data$centroids$y[k_val])^2 
+      }
+    }
+  }
+  return(within_sum_squares)
+}
+```
+
+## Return data & graphics
+```{r}
+get_k_means_graphs <- function(max_k, data, plot_k_means=FALSE, plot_elbow=FALSE) {
+  k_squares <- 2:max_k # Run 2 through max_k given
+  within_sum_squares <- vector("numeric", length(k_squares)) # Create a vector for the sum of squares
+  plots <- vector("list", length(k_squares))
+  
+  for (square in k_squares) {
+    print(paste0("K is: ", square))
+    alg <- kmeans_cluster(data, square) # Run kmeans_cluster algorithm
+    
+    if (plot_k_means) { # Create plot using plot_k_means
+      data_plot <- rbind(alg$centroids, alg$data)
+      plot <- ggplot(data_plot, aes(x=x, y=y, color=as.factor(cluster))) +
+        geom_point() + geom_point(alg$centroids, mapping=aes(x=x, y=y, colour="#6A0500", size=3 )) + 
+        theme(legend.position="none", axis.title=element_blank())
+      
+      plots[[ square ]] <- plot # add each plot to vector 
+    }
+
+    within_sum_squares[square - 1] <- compute_square(alg, square) # calculate sum of squares
+    print(within_sum_squares[square - 1])
+  }
+
+  if (plot_k_means) {
+    plots[[1]] <- NULL
+    title <- paste("Kmeans for K= 2: ", max_k)
+    grid.arrange(grobs=plots, top=title , ncol=3)
+  }
+
+  dataframe <- data_frame(k_squares, within_sum_squares) # combine k_squares and within_sum_squares for plotting
+
+  if (plot_elbow) { # If elbow plot is true, do the plot
+    print(ggplot(dataframe, aes(x=k_squares, y=within_sum_squares)) +
+      geom_line() + geom_point() + 
+      labs(title="The Elbow Curve of Clusters", x="Number of Clusters (K)", y="Within groups sum of squares"))
+  }
+}
+```
+
+# Import Data and execute functions
+```{r}
+kmeans_data <-
+  as.matrix(read.csv("KMeansData_Group1.csv", header=FALSE))
+colnames(kmeans_data) <- c("x", "y") # form into matrix
+
+get_k_means_graphs(15, kmeans_data, plot_k_means=TRUE, plot_elbow=TRUE)
+```
+
