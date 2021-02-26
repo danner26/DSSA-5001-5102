@@ -1,0 +1,45 @@
+You have been given a zip file containing several facial images (labeled photo1.png, photo2.png etc).. You have also been given a facial image of a well known spy in a file called DC.png
+
+Write a Python code to look through all the images and find which one is the spy.
+
+To do this you should write a Python function that returns the SSR of the differences between two images. Then run through each image in the collection and choose the one that has the lowest SSR. Of course, you don't have to write a function to compute SSR - you can just compute right in the code with
+
+SSR = np.sum( (x-y)**2 )
+
+where x and y are the arrays to compare.
+
+but using a function is cleaner.
+
+This is how your code should start:
+
+======================================
+
+from PIL import Image, ImageFilter
+import numpy as np
+
+#Read image
+spy = Image.open( 'DC.png' )
+spy.show()
+
+
+# Convert to numpy array
+pix1 = np.array(spy)
+
+from os import listdir  # import function for listing all files
+
+# Get listing of all files
+listing = listdir()
+
+# Now loop through all files that end in png - you will need to open each file as image, convert to numpy array
+
+# then compare the two arrays by computing the SSR between them - you should have that in a function
+
+
+for file in listing:
+    if file.endswith('.png'):
+
+######   ADD YOUR CODE HERE
+
+
+
+======================================
