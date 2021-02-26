@@ -1,0 +1,15 @@
+I have given you two jupyter notebooks. One implements linear regression using a model dataset and one implements logistic regression using a model dataset.
+
+Before we start developing our own neural network we need to be completely sure of what the loss function is and how we can implement the steepest descent algorithm using autograd to find optimum parameters.
+
+I have given you two notebooks: one implementing a linear regression model and one implementing a logistic regression model.
+
+Note that in many programming languages the following statements are basically equivalent:
+
+a = a + 1   and   a += 1
+
+b = b - 1   and    b -=  1
+
+But when using autograd they are not - always use the second.
+
+Submit pdfs of these notebooks fully "commented up" explaining what each stage of the algorithm does.

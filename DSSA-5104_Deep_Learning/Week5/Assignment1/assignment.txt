@@ -1,0 +1,13 @@
+Autograd is a very powerful library that allows us to compute the slope/gradient/steepness of almost any function of 1 or more independent variables.
+
+y = f(x)
+
+y = f(x,y)
+
+or
+
+y = f(x1, x2, x3, ..., xN)
+
+
+
+I will demo it in class.
