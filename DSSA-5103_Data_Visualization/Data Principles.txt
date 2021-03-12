@@ -1,0 +1,64 @@
+
+Tufte's Principles
+1. Show Comparisons
+Showing properties like size to compare time, like warriors going to battle and the amount returning, the amount returning being smaller.
+
+2. Show causality
+Make colors and parts of the charts to show specific ideas for the story you are telling
+
+3. Use multivariate data
+Information on time, space, physical appearance, behavior, interaction with ecosystem, etc. Multiple types of data to tell a story
+
+4. Complete integrate modes
+To improve displays of data, it is important to completely integrate text, images, and numbers. It is important to include and info or data that is relevant, especially in the inclusion of explanatory text on figures.
+
+5. Establish credibility
+Including source information is very important in creating a convincing visual display or presentation. Allow the viewers to access source material to give confidence in your results. 
+
+6. Focus on content
+Above all else, you must focus on the content to make an effective chart. Minimize the char architecture wherever possible, allow the viewers to access the source material when possible. Find chart junk and remove it.
+
+----------------------------------------------------------
+Berinato Principles
+1. We dont go in order. 
+You do not have to go from left to right, what people notice first varies depending on the chart type and the person looking
+
+2. We see first what stands out
+If there is something you want everyone to notice, make sure it stands out. Use peaks, valleys, intersections, dominant colors, and outliers of the visual to drive the viewer 
+
+3. We only see a few things at once
+Your most prominent visual cue has to make your main point. 
+
+4. We seek and make connections
+Your viewers will try to form a story out of what they see. Your chart is creating a narrative
+
+5. We rely on conventions and metaphors
+Every choice has to consider the tacit assumptions and feelings of the audience. Viewers are likely to look at red as negative, green with positive. If you ignore conventions you are taking a major risk
+If the chart includes light and dark blue, viewers are going to believe your data is related because of color groupings. You need to think about not only the colors, but the groupings as well. "In general you should embrace, not fight, deeply ingrained conventions and metaphors when creating visuals"
+
+----------------------------------------------------------
+Kosslyn's Principles
+1. The principle of Relevance
+communication is most effective when neither too much or too little information is presented
+
+2. The principle of appropriate knowledge
+Communication required prior knowledge of pertinent concepts, jargon, and symbols
+
+3. The principle of salience
+Attention is drawn to large perceptible differences
+
+4. The principle of Discriminability
+Two properties must differ by a large enough proportion or they will not be distinguished
+
+5. The principle of perceptual organization
+People automatically group elements into units, which they then attend to and remember
+
+6. The principle of compatibility
+A message is easiest to understand if its form is compatible with its meaning
+
+7. The principle of informative changes
+People expect changes in properties to carry information
+
+8. The principle of Capacity Limitations
+People have a limited capacity to retain and to process information, and so will not understand a message if too much information must be retained or processed
+
