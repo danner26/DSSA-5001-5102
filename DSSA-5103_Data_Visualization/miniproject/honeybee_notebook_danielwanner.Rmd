@@ -65,7 +65,7 @@ totalprod_state_production <- ggplot(single_totals_over_years, aes(x=state, y=to
 
 totalprod_state_production
 ggsave(
-  "totalprod_state_production.png",
+  "total_honey_produced_1998-2017.png",
   plot = totalprod_state_production,
   dpi = 600
 )
@@ -151,12 +151,12 @@ allneonic_plot <- ggplot(beedata_latest) +
                                panel.background = element_blank())
 
 ggsave(
-  "total_production.png",
+  "pesticide_used_normalized.png",
   plot = allneonic_plot,
   dpi = 600
 )
 ggsave(
-  "all_neonic_pesticide.png",
+  "total_honey_production_normalized.png",
   plot = totalprod_plot,
   dpi = 600
 )
@@ -165,5 +165,11 @@ ggsave(
 
 #Display the maps side by side
 ```{r, fig.width = 12}
-ggpubr::ggarrange(totalprod_plot, allneonic_plot, ncol = 2, nrow = 1)
+side_by_side <- ggpubr::ggarrange(totalprod_plot, allneonic_plot, ncol = 2, nrow = 1)
+side_by_side
+ggsave(
+  "total_honey_production_pesticide_side_by_side.png",
+  plot = side_by_side,
+  dpi = 600
+)
 ```
