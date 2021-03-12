@@ -1,5 +1,5 @@
 ---
-title: "R Assignment 3 Notebook"
+title: "Miniproject notebook"
 output: html_notebook
 # Analysis of https://www.kaggle.com/kevinzmith/honey-with-neonic-pesticide Data
 # Daniel W. Anner 
@@ -16,7 +16,9 @@ library(fiftystater)
 library(viridis)
 library(mapproj)
 library(ggpubr)
-setwd('/home/rstudio/dssa_workspace/R/Assignment3')
+library(ggpmisc)
+library(ggrepel)
+setwd("E:/_Source/Stockton-DSSA/DSSA-5103_Data_Visualization/miniproject")
 ```
 
 # Read in the data
@@ -48,6 +50,27 @@ getLog10 <- function(n) {
   value <- ifelse(n == 0, 0, log10(n))
 }
 ```
+
+```{r, fig.width = 12}
+single_totals_over_years <- beedata %>% group_by(state) %>% transmute(totalprod=sum(totalprod)) %>% slice(1)
+
+totalprod_state_production <- ggplot(single_totals_over_years, aes(x=state, y=totalprod, label = single_totals_over_years$state)) + 
+  geom_point() + 
+  scale_y_continuous(label=addUnits) + 
+  labs(x = "State", y = "Honey Produced (lbs)", title = "Total Honey Produced Per State 1998-2017") +
+  stat_summary(fun=mean, geom="point", shape=23, size=3, fill="#EBAF4C") +
+  annotate(geom = "text", x = 25, y = 658105000, label = "North Dakota: 658Mil lbs", hjust = "left") +
+  annotate(geom = "text", x = 5, y = 404050000, label = "California: 404Mil lbs", hjust = "left") +
+  annotate(geom = "text", x = 23, y = 220565000, label = "Montana: 220Mil lbs", hjust = "left") 
+
+totalprod_state_production
+ggsave(
+  "totalprod_state_production.png",
+  plot = totalprod_state_production,
+  dpi = 600
+)
+```
+
 
 #Boxplot of the Total Honey Produced
 ```{r, fig.width = 12}
@@ -126,6 +149,18 @@ allneonic_plot <- ggplot(beedata_latest) +
   scale_y_continuous(breaks = NULL) +
   labs(x = "", y = "", title = "Pesticide Used Per State", subtitle = "Normalized with log10") + theme(legend.position = "bottom", 
                                panel.background = element_blank())
+
+ggsave(
+  "total_production.png",
+  plot = allneonic_plot,
+  dpi = 600
+)
+ggsave(
+  "all_neonic_pesticide.png",
+  plot = totalprod_plot,
+  dpi = 600
+)
+
 ```
 
 #Display the maps side by side
