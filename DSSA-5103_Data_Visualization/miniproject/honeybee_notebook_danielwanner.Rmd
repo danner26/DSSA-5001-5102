@@ -1,0 +1,134 @@
+---
+title: "R Assignment 3 Notebook"
+output: html_notebook
+# Analysis of https://www.kaggle.com/kevinzmith/honey-with-neonic-pesticide Data
+# Daniel W. Anner 
+---
+# Load any libraries you need
+```{r message=FALSE, warning=TRUE}
+library(devtools)
+install_github("wmurphyrd/fiftystater")
+
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(fiftystater)
+library(viridis)
+library(mapproj)
+library(ggpubr)
+setwd('/home/rstudio/dssa_workspace/R/Assignment3')
+```
+
+# Read in the data
+```{r message=FALSE, warning=TRUE}
+beedata <- read_csv("HoneyBees.csv")
+```
+
+# Look at the data
+```{r}
+glimpse(beedata)
+unique(beedata$year)
+```
+
+#Helper functions for later use
+```{r message=FALSE}
+# Ref: https://5harad.com/mse125/r/visualization_code.html
+addUnits <- function(n) {
+  labels <- ifelse(n < 1000, n,  # less than thousands
+                   ifelse(n < 1e6, paste0(round(n/1e3), 'k'),  # in thousands
+                          ifelse(n < 1e9, paste0(round(n/1e6), 'M'),  # in millions
+                                 ifelse(n < 1e12, paste0(round(n/1e9), 'B'), # in billions
+                                        ifelse(n < 1e15, paste0(round(n/1e12), 'T'), # in trillions
+                                               'too big!'
+                                        )))))
+  return(labels)
+}
+
+getLog10 <- function(n) {
+  value <- ifelse(n == 0, 0, log10(n))
+}
+```
+
+#Boxplot of the Total Honey Produced
+```{r, fig.width = 12}
+boxplot <- ggplot(beedata, aes(x=state, y=totalprod)) +
+  geom_jitter(alpha = 0.5, color="#fdd42d") + #aes(color = as.factor(year))) +
+  geom_boxplot(outlier.color="blue", outlier.shape=4, outlier.size=4, fill="#22c1c3")  +
+  scale_y_continuous(label=addUnits) + 
+  labs(x = "State", y = "Honey Produced (lbs)", title = "Total Honey Produced Per State") +
+  stat_summary(fun.y=mean, geom="point", shape=23, size=3, fill="tomato")
+  #+ scale_colour_manual(values = rainbow(20)) 
+
+boxplot
+```
+
+#Plot of yield per colony compared to honey produced
+```{r message=FALSE}
+ggplot(beedata, aes(x=yieldpercol, y=totalprod)) +
+  geom_point(aes(color = state)) +
+  stat_summary(fun.data=mean_cl_normal) + 
+  geom_smooth(method='lm', formula= y~x, color="black") + 
+  scale_y_continuous(label=addUnits) +
+  labs(x = "Yield Per Colony (lbs)", y = "Honey Produced (lbs)", title = "Yield Per Colony to Honey Produced")
+```
+
+#Transform beedata_latest
+```{r message=FALSE}
+beedata_latest <- beedata %>% group_by(state) %>% slice(which.max(year))
+beedata_latest <- beedata_latest %>% mutate(nAllNeonic = (2.2 * nAllNeonic))
+beedata_latest <- beedata_latest %>% mutate(nAllNeonic = coalesce(nAllNeonic, 0))
+```
+
+#Create our maps
+```{r message=FALSE}
+#USA State map
+USA <- map_data("state")
+
+#Total honey production map
+totalprod_plot <- ggplot(beedata_latest) + 
+  geom_map(map = fifty_states, aes(map_id = str_to_lower(StateName), fill = getLog10(totalprod))) + 
+  labs(fill = "Total Production (lbs)" ) + 
+  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+  borders("state") +
+  coord_map() +
+  geom_text(
+    data = fifty_states %>%
+      group_by(id) %>%
+      summarise(lat = mean(c(max(lat), min(lat))),
+                long = mean(c(max(long), min(long)))) %>%
+      mutate(state = id) %>%
+      left_join(beedata_latest, by = c("state" = "state")),
+    aes(x = long, y = lat, label = getLog10(totalprod) )
+    ) +
+  scale_fill_gradient(low="#22c1c3", high="#fdd42d") +
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  labs(x = "", y = "", title = "Honey Produced Per State", subtitle = "Normalized with log10") + theme(legend.position = "bottom", 
+                               panel.background = element_blank())
+#Total Pesticide used map
+allneonic_plot <- ggplot(beedata_latest) +
+  geom_map(map = fifty_states, aes(map_id = str_to_lower(StateName), fill = getLog10(nAllNeonic))) +
+  labs(fill = "Total Pesticide (lbs)") +
+  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+  borders("state") +
+  coord_map() +
+  geom_text(
+    data = fifty_states %>%
+      group_by(id) %>%
+      summarise(lat = mean(c(max(lat), min(lat))),
+                long = mean(c(max(long), min(long)))) %>%
+      mutate(state = id) %>%
+      left_join(beedata_latest, by = c("state" = "state")),
+    aes(x = long, y = lat, label = getLog10(nAllNeonic))
+    ) +
+  scale_fill_gradient(low="#22c1c3", high="#ff7700") +
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  labs(x = "", y = "", title = "Pesticide Used Per State", subtitle = "Normalized with log10") + theme(legend.position = "bottom", 
+                               panel.background = element_blank())
+```
+
+#Display the maps side by side
+```{r, fig.width = 12}
+ggpubr::ggarrange(totalprod_plot, allneonic_plot, ncol = 2, nrow = 1)
+```

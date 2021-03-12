@@ -1,0 +1,46 @@
+---
+title: "2007-2019 Stockton University Undergraduate Enrollment"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(DT)
+thedata <- read.csv("enrollment.csv")
+```
+
+Column {data-width=650, data-height=450}
+-----------------------------------------------------------------------
+
+### Year-to-Year Glace At Student Enrollment 
+
+```{r}
+ggplot(thedata, aes(x= year, y=total, fill= total)) +                              
+  geom_col() +                                                                   # create simple bar chart of total population   
+  labs(x = "", y="Students Enrolled ", title = "Undergraduate Enrollment", subtitle = "Students attending part-time and full-time status", caption = "Data source: 2019 Stockton University Regents") +                               # create title, axis, subtitle, caption 
+  theme_classic() +                                                              # remove background color and grid lines  
+  theme(axis.ticks.x = element_blank()) + theme(axis.ticks.y = element_blank()) +# remove tick marks from x and y axis 
+  theme(axis.text.x = element_text(size = 6))                                    # decrease font size of x axis
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Enrollment Status
+
+```{r}
+myicon <- ifelse(thedata$total[1] < thedata$total[12], "fa_arrow_up","fa_arrow_down") # Create up and down arrow for enrollment whether enrollment is up/down from previous year
+mycolor <- ifelse(thedata$total[1] < thedata$total[12], "success", "danger")          # Set color to determine if enrommnet has increased = success or decreased = danger
+valueBox(scales::number(thedata$total[12]), color = mycolor, myicon)                  # Creates value box and let us know if enrollment is up or down by the color
+```
+
+### 2007 - 2019 Enrollment View
+
+```{r}
+DT::datatable(thedata, options = list(dom = 't'))  # create data table and have button to adjust
+```
+
