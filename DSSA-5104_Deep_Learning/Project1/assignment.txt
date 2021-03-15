@@ -1,0 +1,6 @@
+For Project 1 please submit:
+1. Your commented, working code.Comments should explain what is going on in the algorithm.
+2. Demonstrations of your code results including:
+a. An evaluation of your NN accuracy; how well does it predict the observed targets based on the features as inputs.
+b. A demonstration of the how the loss function decreases with each iteration (epoch). Plot a graph of loss function versus iteration. Do this for three different learning rates to show how convergence depends on learning rate.
+As always this should all be submitted in a pdf.
