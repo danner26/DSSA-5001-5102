@@ -25,23 +25,138 @@ output: html_notebook
 ## Import statements and Work Directory
 ```{r}
 library(ggplot2)
-library(caTools)
+library(caTools) #using caTools like describe in the powerpoint slides 
 setwd("E:/_Source/Stockton-DSSA/DSSA-5201_Machine_Learning_Fundamentals/LogisticRegression")
 ```
 
-## Import Data
+## Import Data & create test/train sets
 ```{r}
 df <- read.csv("LogisticData_1.csv", header = TRUE)
 #split data into testing and training
-#using caTools like describe in the powerpoint slides 
-set.seed(8675309) #https://www.youtube.com/watch?v=6WTdTwcmxyo
+seed = 12283712
+set.seed(seed)
 #set seed so that the same sample can be reproduced in future
-#now selecting 75% of data as sample from total 'n' rows of the data  
+#select 75% of data as sample from total 'n' rows of the data  
 indexes = sample.split(df$Y, SplitRatio = 0.75)
 #split data into test and train
 train = subset(df, indexes == TRUE)
 test  = subset(df, indexes == FALSE)
 #remove the index variable from memory
 rm(indexes)
+```
+
+## Sigmoid Function
+```{r}
+#basic sigmoid function
+sigmoid = function(x){
+  1 / (1 + exp(-x))
+}
+```
+
+#Daniel W. Anner Logistic Regression function
+```{r}
+Logistic_Regression=function(x,y)
+{
+  #create an iterable variable, i
+  #create max iterations, n 
+  #create a boolean variable to determine stoppage, converged
+  i = 0
+  n = 100
+  converged = FALSE
+  #tolerance 
+  alpha = 0.001
+  #create coefficients var 
+  coefficients = 1
+  #set matrix weights equal to 1 to start 
+  #set dimension of the matrix 
+  coefficients = matrix(coefficients, dim(x)[2])
+  
+  #update weights
+  #loop will stop when converged or iterations  reached  
+  while (i < n & !converged){
+    #run x values and coefficients through sigmoid function
+    predict <- sigmoid(x %*% coefficients)
+    
+    #set the diagonals of the matrix to 0
+    predict_diag = diag(predict[,1])
+    
+    #update weights
+    #solve() will  find the coefficient in the equation 
+    #also finds the inverse of given matrix
+    #we use the coefficients in the solve() function
+    #which finds an update to the current coefficients 
+    coefficients = coefficients + solve(t(x) %*% predict_diag %*% x) %*% 
+      t(x) %*% (y - predict)
+    
+    #compute mean squared error to check completion
+    MSE = mean((y - sigmoid(x %*% coefficients))^2)
+    
+    #if mean squared error is less than alpha, we can stop 
+    if (MSE < alpha){
+      converged = TRUE
+    }
+    i=i+1 #iterate the count
+  }
+  
+  predicted = sigmoid(x %*% coefficients)
+  confmatrix = table(Actual = y, Predicted = predicted > 0.5)
+  custom_lr_accuracy = (sum(diag(confmatrix))) / (sum(confmatrix))
+  print('Logistic Regression Model coefficients')
+  print(coefficients)
+  print('------------------------------')
+  print('Logistic Regression Model Confusion Matrix')
+  print(table(Actual = y, Predicted = sigmoid(x %*% coefficients) > 0.5))
+  print('------------------------------')
+  print('Logistic Regression Model Accuracy')
+  print(custom_lr_accuracy)
+  return custom_lr_accuracy
+}
+```
+
+#Initial x/y data and running the Logistic_Regression function
+```{r}
+#insert x1 and x2 values in a matrix
+x <- as.matrix(train[1:2])
+#add an extra row of all 1's for our matrix multiplication later
+x <- cbind(x, intercept=1)
+#get y values in a matrix 
+y <- as.matrix(train[3])
+
+#Run the model
+custom_lr_accuracy <- Logistic_Regression(x,y)
+```
+
+#Run R's Logistic Regression for comparison
+```{r}
+#test with R's Logistic Regression
+#Y is the response var and X1 and X2 are the predictor vars
+#using generalized linear models [glm()] with family link as binomial
+model <-  glm(Y~., train, family="binomial")
+
+#predict() function predicts the Y var from test data using X1 and X2 variables
+results <-  predict(model, test, type="response")
+str(results)
+```
+
+#R's Confusion matrix for comparison
+```{r}
+#create confmatrix, we save this as a var because we need it for the accuracy function later
+confmatrix <- table(Actual = test$Y, Predicted = results > 0.5)
+print('R Model Confusion Matrix')
+print(confmatrix)
+```
+
+#R's accuracy for comparison
+```{r}
+r_lr_accuracy <- ((confmatrix[1] + confmatrix[4]) / sum(confmatrix))
+print(paste('R model accuracy:', r_lr_accuracy)) #accuracy function
+```
+
+```{r}
+if(custom_lr_accuracy > r_lr_accuracy) {
+  print(paste('WOO! Our function is MORE accurate. We are using the seed:', seed))
+} else {
+  print(paste('Aww! Our function is LESS accurate. We are using the seed:', seed))
+}
 ```
 

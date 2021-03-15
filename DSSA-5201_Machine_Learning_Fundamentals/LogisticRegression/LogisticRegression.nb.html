@@ -269,25 +269,25 @@ pre code {
 <h2>Import statements and Work Directory</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShjYVRvb2xzKVxuc2V0d2QoXCJFOi9fU291cmNlL1N0b2NrdG9uLURTU0EvRFNTQS01MjAxX01hY2hpbmVfTGVhcm5pbmdfRnVuZGFtZW50YWxzL0xvZ2lzdGljUmVncmVzc2lvblwiKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShjYVRvb2xzKSAjdXNpbmcgY2FUb29scyBsaWtlIGRlc2NyaWJlIGluIHRoZSBwb3dlcnBvaW50IHNsaWRlcyBcbnNldHdkKFwiRTovX1NvdXJjZS9TdG9ja3Rvbi1EU1NBL0RTU0EtNTIwMV9NYWNoaW5lX0xlYXJuaW5nX0Z1bmRhbWVudGFscy9Mb2dpc3RpY1JlZ3Jlc3Npb25cIilcbmBgYCJ9 -->
 <pre class="r"><code>library(ggplot2)
-library(caTools)
+library(caTools) #using caTools like describe in the powerpoint slides 
 setwd(&quot;E:/_Source/Stockton-DSSA/DSSA-5201_Machine_Learning_Fundamentals/LogisticRegression&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="import-data" class="section level2">
-<h2>Import Data</h2>
+<div id="import-data-create-testtrain-sets" class="section level2">
+<h2>Import Data &amp; create test/train sets</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgPC0gcmVhZC5jc3YoXCJMb2dpc3RpY0RhdGFfMS5jc3ZcIiwgaGVhZGVyID0gVFJVRSlcbiNzcGxpdCBkYXRhIGludG8gdGVzdGluZyBhbmQgdHJhaW5pbmdcbiN1c2luZyBjYVRvb2xzIGxpa2UgZGVzY3JpYmUgaW4gdGhlIHBvd2VycG9pbnQgc2xpZGVzIFxuc2V0LnNlZWQoODY3NTMwOSkgI2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9NldUZFR3Y214eW9cbiNzZXQgc2VlZCBzbyB0aGF0IHRoZSBzYW1lIHNhbXBsZSBjYW4gYmUgcmVwcm9kdWNlZCBpbiBmdXR1cmVcbiNub3cgc2VsZWN0aW5nIDc1JSBvZiBkYXRhIGFzIHNhbXBsZSBmcm9tIHRvdGFsICduJyByb3dzIG9mIHRoZSBkYXRhICBcbmluZGV4ZXMgPSBzYW1wbGUuc3BsaXQoZGYkWSwgU3BsaXRSYXRpbyA9IDAuNzUpXG4jc3BsaXQgZGF0YSBpbnRvIHRlc3QgYW5kIHRyYWluXG50cmFpbiA9IHN1YnNldChkZiwgaW5kZXhlcyA9PSBUUlVFKVxudGVzdCAgPSBzdWJzZXQoZGYsIGluZGV4ZXMgPT0gRkFMU0UpXG4jcmVtb3ZlIHRoZSBpbmRleCB2YXJpYWJsZSBmcm9tIG1lbW9yeVxucm0oaW5kZXhlcylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgPC0gcmVhZC5jc3YoXCJMb2dpc3RpY0RhdGFfMS5jc3ZcIiwgaGVhZGVyID0gVFJVRSlcbiNzcGxpdCBkYXRhIGludG8gdGVzdGluZyBhbmQgdHJhaW5pbmdcbnNlZWQgPSAxMjI4MzcxMlxuc2V0LnNlZWQoc2VlZClcbiNzZXQgc2VlZCBzbyB0aGF0IHRoZSBzYW1lIHNhbXBsZSBjYW4gYmUgcmVwcm9kdWNlZCBpbiBmdXR1cmVcbiNzZWxlY3QgNzUlIG9mIGRhdGEgYXMgc2FtcGxlIGZyb20gdG90YWwgJ24nIHJvd3Mgb2YgdGhlIGRhdGEgIFxuaW5kZXhlcyA9IHNhbXBsZS5zcGxpdChkZiRZLCBTcGxpdFJhdGlvID0gMC43NSlcbiNzcGxpdCBkYXRhIGludG8gdGVzdCBhbmQgdHJhaW5cbnRyYWluID0gc3Vic2V0KGRmLCBpbmRleGVzID09IFRSVUUpXG50ZXN0ICA9IHN1YnNldChkZiwgaW5kZXhlcyA9PSBGQUxTRSlcbiNyZW1vdmUgdGhlIGluZGV4IHZhcmlhYmxlIGZyb20gbWVtb3J5XG5ybShpbmRleGVzKVxuYGBgIn0= -->
 <pre class="r"><code>df &lt;- read.csv(&quot;LogisticData_1.csv&quot;, header = TRUE)
 #split data into testing and training
-#using caTools like describe in the powerpoint slides 
-set.seed(8675309) #https://www.youtube.com/watch?v=6WTdTwcmxyo
+seed = 12283712
+set.seed(seed)
 #set seed so that the same sample can be reproduced in future
-#now selecting 75% of data as sample from total &#39;n&#39; rows of the data  
+#select 75% of data as sample from total &#39;n&#39; rows of the data  
 indexes = sample.split(df$Y, SplitRatio = 0.75)
 #split data into test and train
 train = subset(df, indexes == TRUE)
@@ -297,11 +297,185 @@ rm(indexes)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+<div id="sigmoid-function" class="section level2">
+<h2>Sigmoid Function</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2Jhc2ljIHNpZ21vaWQgZnVuY3Rpb25cbnNpZ21vaWQgPSBmdW5jdGlvbih4KXtcbiAgMSAvICgxICsgZXhwKC14KSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#basic sigmoid function
+sigmoid = function(x){
+  1 / (1 + exp(-x))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Daniel W. Anner Logistic Regression function</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTG9naXN0aWNfUmVncmVzc2lvbj1mdW5jdGlvbih4LHkpXG57XG4gICNjcmVhdGUgYW4gaXRlcmFibGUgdmFyaWFibGUsIGlcbiAgI2NyZWF0ZSBtYXggaXRlcmF0aW9ucywgbiBcbiAgI2NyZWF0ZSBhIGJvb2xlYW4gdmFyaWFibGUgdG8gZGV0ZXJtaW5lIHN0b3BwYWdlLCBjb252ZXJnZWRcbiAgaSA9IDBcbiAgbiA9IDEwMFxuICBjb252ZXJnZWQgPSBGQUxTRVxuICAjdG9sZXJhbmNlIFxuICBhbHBoYSA9IDAuMDAxXG4gICNjcmVhdGUgY29lZmZpY2llbnRzIHZhciBcbiAgY29lZmZpY2llbnRzID0gMVxuICAjc2V0IG1hdHJpeCB3ZWlnaHRzIGVxdWFsIHRvIDEgdG8gc3RhcnQgXG4gICNzZXQgZGltZW5zaW9uIG9mIHRoZSBtYXRyaXggXG4gIGNvZWZmaWNpZW50cyA9IG1hdHJpeChjb2VmZmljaWVudHMsIGRpbSh4KVsyXSlcbiAgXG4gICN1cGRhdGUgd2VpZ2h0c1xuICAjbG9vcCB3aWxsIHN0b3Agd2hlbiBjb252ZXJnZWQgb3IgaXRlcmF0aW9ucyAgcmVhY2hlZCAgXG4gIHdoaWxlIChpIDwgbiAmICFjb252ZXJnZWQpe1xuICAgICNydW4geCB2YWx1ZXMgYW5kIGNvZWZmaWNpZW50cyB0aHJvdWdoIHNpZ21vaWQgZnVuY3Rpb25cbiAgICBwcmVkaWN0IDwtIHNpZ21vaWQoeCAlKiUgY29lZmZpY2llbnRzKVxuICAgIFxuICAgICNzZXQgdGhlIGRpYWdvbmFscyBvZiB0aGUgbWF0cml4IHRvIDBcbiAgICBwcmVkaWN0X2RpYWcgPSBkaWFnKHByZWRpY3RbLDFdKVxuICAgIFxuICAgICN1cGRhdGUgd2VpZ2h0c1xuICAgICNzb2x2ZSgpIHdpbGwgIGZpbmQgdGhlIGNvZWZmaWNpZW50IGluIHRoZSBlcXVhdGlvbiBcbiAgICAjYWxzbyBmaW5kcyB0aGUgaW52ZXJzZSBvZiBnaXZlbiBtYXRyaXhcbiAgICAjd2UgdXNlIHRoZSBjb2VmZmljaWVudHMgaW4gdGhlIHNvbHZlKCkgZnVuY3Rpb25cbiAgICAjd2hpY2ggZmluZHMgYW4gdXBkYXRlIHRvIHRoZSBjdXJyZW50IGNvZWZmaWNpZW50cyBcbiAgICBjb2VmZmljaWVudHMgPSBjb2VmZmljaWVudHMgKyBzb2x2ZSh0KHgpICUqJSBwcmVkaWN0X2RpYWcgJSolIHgpICUqJSBcbiAgICAgIHQoeCkgJSolICh5IC0gcHJlZGljdClcbiAgICBcbiAgICAjY29tcHV0ZSBtZWFuIHNxdWFyZWQgZXJyb3IgdG8gY2hlY2sgY29tcGxldGlvblxuICAgIE1TRSA9IG1lYW4oKHkgLSBzaWdtb2lkKHggJSolIGNvZWZmaWNpZW50cykpXjIpXG4gICAgXG4gICAgI2lmIG1lYW4gc3F1YXJlZCBlcnJvciBpcyBsZXNzIHRoYW4gYWxwaGEsIHdlIGNhbiBzdG9wIFxuICAgIGlmIChNU0UgPCBhbHBoYSl7XG4gICAgICBjb252ZXJnZWQgPSBUUlVFXG4gICAgfVxuICAgIGk9aSsxICNpdGVyYXRlIHRoZSBjb3VudFxuICB9XG4gIFxuICBwcmVkaWN0ZWQgPSBzaWdtb2lkKHggJSolIGNvZWZmaWNpZW50cylcbiAgY29uZm1hdHJpeCA9IHRhYmxlKEFjdHVhbCA9IHksIFByZWRpY3RlZCA9IHByZWRpY3RlZCA+IDAuNSlcbiAgY3VzdG9tX2xyX2FjY3VyYWN5ID0gKHN1bShkaWFnKGNvbmZtYXRyaXgpKSkgLyAoc3VtKGNvbmZtYXRyaXgpKVxuICBwcmludCgnTG9naXN0aWMgUmVncmVzc2lvbiBNb2RlbCBjb2VmZmljaWVudHMnKVxuICBwcmludChjb2VmZmljaWVudHMpXG4gIHByaW50KCctLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0nKVxuICBwcmludCgnTG9naXN0aWMgUmVncmVzc2lvbiBNb2RlbCBDb25mdXNpb24gTWF0cml4JylcbiAgcHJpbnQodGFibGUoQWN0dWFsID0geSwgUHJlZGljdGVkID0gc2lnbW9pZCh4ICUqJSBjb2VmZmljaWVudHMpID4gMC41KSlcbiAgcHJpbnQoJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLScpXG4gIHByaW50KCdMb2dpc3RpYyBSZWdyZXNzaW9uIE1vZGVsIEFjY3VyYWN5JylcbiAgcHJpbnQoY3VzdG9tX2xyX2FjY3VyYWN5KVxufVxuYGBgIn0= -->
+<pre class="r"><code>Logistic_Regression=function(x,y)
+{
+  #create an iterable variable, i
+  #create max iterations, n 
+  #create a boolean variable to determine stoppage, converged
+  i = 0
+  n = 100
+  converged = FALSE
+  #tolerance 
+  alpha = 0.001
+  #create coefficients var 
+  coefficients = 1
+  #set matrix weights equal to 1 to start 
+  #set dimension of the matrix 
+  coefficients = matrix(coefficients, dim(x)[2])
+  
+  #update weights
+  #loop will stop when converged or iterations  reached  
+  while (i &lt; n &amp; !converged){
+    #run x values and coefficients through sigmoid function
+    predict &lt;- sigmoid(x %*% coefficients)
+    
+    #set the diagonals of the matrix to 0
+    predict_diag = diag(predict[,1])
+    
+    #update weights
+    #solve() will  find the coefficient in the equation 
+    #also finds the inverse of given matrix
+    #we use the coefficients in the solve() function
+    #which finds an update to the current coefficients 
+    coefficients = coefficients + solve(t(x) %*% predict_diag %*% x) %*% 
+      t(x) %*% (y - predict)
+    
+    #compute mean squared error to check completion
+    MSE = mean((y - sigmoid(x %*% coefficients))^2)
+    
+    #if mean squared error is less than alpha, we can stop 
+    if (MSE &lt; alpha){
+      converged = TRUE
+    }
+    i=i+1 #iterate the count
+  }
+  
+  predicted = sigmoid(x %*% coefficients)
+  confmatrix = table(Actual = y, Predicted = predicted &gt; 0.5)
+  custom_lr_accuracy = (sum(diag(confmatrix))) / (sum(confmatrix))
+  print(&#39;Logistic Regression Model coefficients&#39;)
+  print(coefficients)
+  print(&#39;------------------------------&#39;)
+  print(&#39;Logistic Regression Model Confusion Matrix&#39;)
+  print(table(Actual = y, Predicted = sigmoid(x %*% coefficients) &gt; 0.5))
+  print(&#39;------------------------------&#39;)
+  print(&#39;Logistic Regression Model Accuracy&#39;)
+  print(custom_lr_accuracy)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Initial x/y data and running the Logistic_Regression function</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc2VydCB4MSBhbmQgeDIgdmFsdWVzIGluIGEgbWF0cml4XG54IDwtIGFzLm1hdHJpeCh0cmFpblsxOjJdKVxuI2FkZCBhbiBleHRyYSByb3cgb2YgYWxsIDEncyBmb3Igb3VyIG1hdHJpeCBtdWx0aXBsaWNhdGlvbiBsYXRlclxueCA8LSBjYmluZCh4LCBpbnRlcmNlcHQ9MSlcbiNnZXQgeSB2YWx1ZXMgaW4gYSBtYXRyaXggXG55IDwtIGFzLm1hdHJpeCh0cmFpblszXSlcblxuI1J1biB0aGUgbW9kZWxcbmN1c3RvbV9scl9hY2N1cmFjeSA8LSBMb2dpc3RpY19SZWdyZXNzaW9uKHgseSlcbmBgYCJ9 -->
+<pre class="r"><code>#insert x1 and x2 values in a matrix
+x &lt;- as.matrix(train[1:2])
+#add an extra row of all 1&#39;s for our matrix multiplication later
+x &lt;- cbind(x, intercept=1)
+#get y values in a matrix 
+y &lt;- as.matrix(train[3])
+
+#Run the model
+custom_lr_accuracy &lt;- Logistic_Regression(x,y)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiTG9naXN0aWMgUmVncmVzc2lvbiBNb2RlbCBjb2VmZmljaWVudHNcIlxuICAgICAgICAgICAgICAgICAgIFlcblgxICAgICAgICAwLjA4NTgxMTU3XG5YMiAgICAgICAgMS4zNjM5MzU4OFxuaW50ZXJjZXB0IDMuMzQ3MTUwNjJcblsxXSBcIi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVwiXG5bMV0gXCJMb2dpc3RpYyBSZWdyZXNzaW9uIE1vZGVsIENvbmZ1c2lvbiBNYXRyaXhcIlxuICAgICAgUHJlZGljdGVkXG5BY3R1YWwgRkFMU0UgVFJVRVxuICAgICAwICAgICA2ICAgNDhcbiAgICAgMSAgICAgMiAgNjk0XG5bMV0gXCItLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cIlxuWzFdIFwiTG9naXN0aWMgUmVncmVzc2lvbiBNb2RlbCBBY2N1cmFjeVwiXG5bMV0gMC45MzMzMzMzXG4ifQ== -->
+<pre><code>[1] &quot;Logistic Regression Model coefficients&quot;
+                   Y
+X1        0.08581157
+X2        1.36393588
+intercept 3.34715062
+[1] &quot;------------------------------&quot;
+[1] &quot;Logistic Regression Model Confusion Matrix&quot;
+      Predicted
+Actual FALSE TRUE
+     0     6   48
+     1     2  694
+[1] &quot;------------------------------&quot;
+[1] &quot;Logistic Regression Model Accuracy&quot;
+[1] 0.9333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Run R’s Logistic Regression for comparison</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3Rlc3Qgd2l0aCBSJ3MgTG9naXN0aWMgUmVncmVzc2lvblxuI1kgaXMgdGhlIHJlc3BvbnNlIHZhciBhbmQgWDEgYW5kIFgyIGFyZSB0aGUgcHJlZGljdG9yIHZhcnNcbiN1c2luZyBnZW5lcmFsaXplZCBsaW5lYXIgbW9kZWxzIFtnbG0oKV0gd2l0aCBmYW1pbHkgbGluayBhcyBiaW5vbWlhbFxubW9kZWwgPC0gIGdsbShZfi4sIHRyYWluLCBmYW1pbHk9XCJiaW5vbWlhbFwiKVxuXG4jcHJlZGljdCgpIGZ1bmN0aW9uIHByZWRpY3RzIHRoZSBZIHZhciBmcm9tIHRlc3QgZGF0YSB1c2luZyBYMSBhbmQgWDIgdmFyaWFibGVzXG5yZXN1bHRzIDwtICBwcmVkaWN0KG1vZGVsLCB0ZXN0LCB0eXBlPVwicmVzcG9uc2VcIilcbnN0cihyZXN1bHRzKVxuYGBgIn0= -->
+<pre class="r"><code>#test with R&#39;s Logistic Regression
+#Y is the response var and X1 and X2 are the predictor vars
+#using generalized linear models [glm()] with family link as binomial
+model &lt;-  glm(Y~., train, family=&quot;binomial&quot;)
+
+#predict() function predicts the Y var from test data using X1 and X2 variables
+results &lt;-  predict(model, test, type=&quot;response&quot;)
+str(results)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIE5hbWVkIG51bSBbMToyNTBdIDAuOTkgMC45NTUgMC45ODQgMC45NDggMC45OTUgLi4uXG4gLSBhdHRyKCosIFwibmFtZXNcIik9IGNociBbMToyNTBdIFwiMTFcIiBcIjIwXCIgXCIyNlwiIFwiMjdcIiAuLi5cbiJ9 -->
+<pre><code> Named num [1:250] 0.99 0.955 0.984 0.948 0.995 ...
+ - attr(*, &quot;names&quot;)= chr [1:250] &quot;11&quot; &quot;20&quot; &quot;26&quot; &quot;27&quot; ...</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#R’s Confusion matrix for comparison</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2NyZWF0ZSBjb25mbWF0cml4LCB3ZSBzYXZlIHRoaXMgYXMgYSB2YXIgYmVjYXVzZSB3ZSBuZWVkIGl0IGZvciB0aGUgYWNjdXJhY3kgZnVuY3Rpb24gbGF0ZXJcbmNvbmZtYXRyaXggPC0gdGFibGUoQWN0dWFsID0gdGVzdCRZLCBQcmVkaWN0ZWQgPSByZXN1bHRzID4gMC41KVxucHJpbnQoJ1IgTW9kZWwgQ29uZnVzaW9uIE1hdHJpeCcpXG5gYGAifQ== -->
+<pre class="r"><code>#create confmatrix, we save this as a var because we need it for the accuracy function later
+confmatrix &lt;- table(Actual = test$Y, Predicted = results &gt; 0.5)
+print(&#39;R Model Confusion Matrix&#39;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiUiBNb2RlbCBDb25mdXNpb24gTWF0cml4XCJcbiJ9 -->
+<pre><code>[1] &quot;R Model Confusion Matrix&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQoY29uZm1hdHJpeClcbmBgYCJ9 -->
+<pre class="r"><code>print(confmatrix)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgUHJlZGljdGVkXG5BY3R1YWwgRkFMU0UgVFJVRVxuICAgICAwICAgICAyICAgMTZcbiAgICAgMSAgICAgMSAgMjMxXG4ifQ== -->
+<pre><code>      Predicted
+Actual FALSE TRUE
+     0     2   16
+     1     1  231</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#R’s accuracy for comparison</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucl9scl9hY2N1cmFjeSA8LSAoKGNvbmZtYXRyaXhbMV0gKyBjb25mbWF0cml4WzRdKSAvIHN1bShjb25mbWF0cml4KSlcbnByaW50KHBhc3RlKCdSIG1vZGVsIGFjY3VyYWN5OicsIHJfbHJfYWNjdXJhY3kpKSAjYWNjdXJhY3kgZnVuY3Rpb25cbmBgYCJ9 -->
+<pre class="r"><code>r_lr_accuracy &lt;- ((confmatrix[1] + confmatrix[4]) / sum(confmatrix))
+print(paste(&#39;R model accuracy:&#39;, r_lr_accuracy)) #accuracy function</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiUiBtb2RlbCBhY2N1cmFjeTogMC45MzJcIlxuIn0= -->
+<pre><code>[1] &quot;R model accuracy: 0.932&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaWYoY3VzdG9tX2xyX2FjY3VyYWN5ID4gcl9scl9hY2N1cmFjeSkge1xuICBwcmludChwYXN0ZSgnV09PISBPdXIgZnVuY3Rpb24gaXMgTU9SRSBhY2N1cmF0ZS4gV2UgYXJlIHVzaW5nIHRoZSBzZWVkOicsIHNlZWQpKVxufSBlbHNlIHtcbiAgcHJpbnQocGFzdGUoJ0F3dyEgT3VyIGZ1bmN0aW9uIGlzIExFU1MgYWNjdXJhdGUuIFdlIGFyZSB1c2luZyB0aGUgc2VlZDonLCBzZWVkKSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>if(custom_lr_accuracy &gt; r_lr_accuracy) {
+  print(paste(&#39;WOO! Our function is MORE accurate. We are using the seed:&#39;, seed))
+} else {
+  print(paste(&#39;Aww! Our function is LESS accurate. We are using the seed:&#39;, seed))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiV09PISBPdXIgZnVuY3Rpb24gaXMgTU9SRSBhY2N1cmF0ZS4gV2UgYXJlIHVzaW5nIHRoZSBzZWVkOiAxMjI4MzcxMlwiXG4ifQ== -->
+<pre><code>[1] &quot;WOO! Our function is MORE accurate. We are using the seed: 12283712&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIyBEYW5pZWwgVy4gQW5uZXINCiMjIExvZ2lzdGljIFJlZ3Jlc3Npb24NCg0KIyMgUHNldWRvQ29kZQ0KIyBSZWFkIHRoZSBkYXRhDQojIERpdmlkZSBkYXRhIGludG8gdHJhaW5pbmcgYW5kIHRlc3QgZGF0YQ0KIyBEZXRlcm1pbmUgdGhlIG51bWJlciBvZiBpdGVyYXRpb25zLCBuDQojIFRyYWluIHRoZSBtb2RlbCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YXNldA0KIyMgQ3JlYXRlIGEgbWF0cml4IFggZnJvbSB0aGUgdHJhaW5pbmcgZGF0YSB3aXRoIGsgZmVhdHVyZXMgYW5kIG0gb2JzZXJ2YXRpb25zDQojIyBDcmVhdGUgdGhlIFkgbWF0cml4IChhY3R1YWxseSBhIHZlY3RvcikgDQojIyBDcmVhdGUgYSBtYXRyaXggKGFjdHVhbGx5IHZlY3RvciksIFcsIG9mIGsgemVyb2VzIChlLmcuIFswLCAwLCAuLCAwXSApDQojIyBMb29wIGZvciBuIGl0ZXJhdGlvbnMNCiMjIyBDb21wdXRlIHRoZSBzaWdtb2lkIHJlc3VsdCwgZyh4KSA9IDEgLyAoMSArIGVeLShXWCkpDQojIyMgQ29tcHV0ZSB0aGUgZ3JhZGllbnQgPSAoMS9tKSAqIFgoZyh4KSAtIFkpDQojIyMgVyA9IFcgLSAoMC4wMDEgKiBncmFkaWVudCkNCiMgTWFrZSBwcmVkaWN0aW9ucyB1c2luZyB0aGUgdGVzdCBkYXRhc2V0DQojIyBDb21wdXRlciBZaGF0ID0gMSAvIDEgKyBlXi0oV15UKlgpDQojIFRlc3QgdGhlIG1vZGVsIA0KDQojIyBJbXBvcnQgc3RhdGVtZW50cyBhbmQgV29yayBEaXJlY3RvcnkNCmBgYHtyfQ0KbGlicmFyeShnZ3Bsb3QyKQ0KbGlicmFyeShjYVRvb2xzKQ0Kc2V0d2QoIkU6L19Tb3VyY2UvU3RvY2t0b24tRFNTQS9EU1NBLTUyMDFfTWFjaGluZV9MZWFybmluZ19GdW5kYW1lbnRhbHMvTG9naXN0aWNSZWdyZXNzaW9uIikNCmBgYA0KDQojIyBJbXBvcnQgRGF0YQ0KYGBge3J9DQpkZiA8LSByZWFkLmNzdigiTG9naXN0aWNEYXRhXzEuY3N2IiwgaGVhZGVyID0gVFJVRSkNCiNzcGxpdCBkYXRhIGludG8gdGVzdGluZyBhbmQgdHJhaW5pbmcNCiN1c2luZyBjYVRvb2xzIGxpa2UgZGVzY3JpYmUgaW4gdGhlIHBvd2VycG9pbnQgc2xpZGVzIA0Kc2V0LnNlZWQoODY3NTMwOSkgI2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9NldUZFR3Y214eW8NCiNzZXQgc2VlZCBzbyB0aGF0IHRoZSBzYW1lIHNhbXBsZSBjYW4gYmUgcmVwcm9kdWNlZCBpbiBmdXR1cmUNCiNub3cgc2VsZWN0aW5nIDc1JSBvZiBkYXRhIGFzIHNhbXBsZSBmcm9tIHRvdGFsICduJyByb3dzIG9mIHRoZSBkYXRhICANCmluZGV4ZXMgPSBzYW1wbGUuc3BsaXQoZGYkWSwgU3BsaXRSYXRpbyA9IDAuNzUpDQojc3BsaXQgZGF0YSBpbnRvIHRlc3QgYW5kIHRyYWluDQp0cmFpbiA9IHN1YnNldChkZiwgaW5kZXhlcyA9PSBUUlVFKQ0KdGVzdCAgPSBzdWJzZXQoZGYsIGluZGV4ZXMgPT0gRkFMU0UpDQojcmVtb3ZlIHRoZSBpbmRleCB2YXJpYWJsZSBmcm9tIG1lbW9yeQ0Kcm0oaW5kZXhlcykNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIyBEYW5pZWwgVy4gQW5uZXINCiMjIExvZ2lzdGljIFJlZ3Jlc3Npb24NCg0KIyMgUHNldWRvQ29kZQ0KIyBSZWFkIHRoZSBkYXRhDQojIERpdmlkZSBkYXRhIGludG8gdHJhaW5pbmcgYW5kIHRlc3QgZGF0YQ0KIyBEZXRlcm1pbmUgdGhlIG51bWJlciBvZiBpdGVyYXRpb25zLCBuDQojIFRyYWluIHRoZSBtb2RlbCB1c2luZyB0aGUgdHJhaW5pbmcgZGF0YXNldA0KIyMgQ3JlYXRlIGEgbWF0cml4IFggZnJvbSB0aGUgdHJhaW5pbmcgZGF0YSB3aXRoIGsgZmVhdHVyZXMgYW5kIG0gb2JzZXJ2YXRpb25zDQojIyBDcmVhdGUgdGhlIFkgbWF0cml4IChhY3R1YWxseSBhIHZlY3RvcikgDQojIyBDcmVhdGUgYSBtYXRyaXggKGFjdHVhbGx5IHZlY3RvciksIFcsIG9mIGsgemVyb2VzIChlLmcuIFswLCAwLCAuLCAwXSApDQojIyBMb29wIGZvciBuIGl0ZXJhdGlvbnMNCiMjIyBDb21wdXRlIHRoZSBzaWdtb2lkIHJlc3VsdCwgZyh4KSA9IDEgLyAoMSArIGVeLShXWCkpDQojIyMgQ29tcHV0ZSB0aGUgZ3JhZGllbnQgPSAoMS9tKSAqIFgoZyh4KSAtIFkpDQojIyMgVyA9IFcgLSAoMC4wMDEgKiBncmFkaWVudCkNCiMgTWFrZSBwcmVkaWN0aW9ucyB1c2luZyB0aGUgdGVzdCBkYXRhc2V0DQojIyBDb21wdXRlciBZaGF0ID0gMSAvIDEgKyBlXi0oV15UKlgpDQojIFRlc3QgdGhlIG1vZGVsIA0KDQojIyBJbXBvcnQgc3RhdGVtZW50cyBhbmQgV29yayBEaXJlY3RvcnkNCmBgYHtyfQ0KbGlicmFyeShnZ3Bsb3QyKQ0KbGlicmFyeShjYVRvb2xzKSAjdXNpbmcgY2FUb29scyBsaWtlIGRlc2NyaWJlIGluIHRoZSBwb3dlcnBvaW50IHNsaWRlcyANCnNldHdkKCJFOi9fU291cmNlL1N0b2NrdG9uLURTU0EvRFNTQS01MjAxX01hY2hpbmVfTGVhcm5pbmdfRnVuZGFtZW50YWxzL0xvZ2lzdGljUmVncmVzc2lvbiIpDQpgYGANCg0KIyMgSW1wb3J0IERhdGEgJiBjcmVhdGUgdGVzdC90cmFpbiBzZXRzDQpgYGB7cn0NCmRmIDwtIHJlYWQuY3N2KCJMb2dpc3RpY0RhdGFfMS5jc3YiLCBoZWFkZXIgPSBUUlVFKQ0KI3NwbGl0IGRhdGEgaW50byB0ZXN0aW5nIGFuZCB0cmFpbmluZw0Kc2VlZCA9IDEyMjgzNzEyDQpzZXQuc2VlZChzZWVkKQ0KI3NldCBzZWVkIHNvIHRoYXQgdGhlIHNhbWUgc2FtcGxlIGNhbiBiZSByZXByb2R1Y2VkIGluIGZ1dHVyZQ0KI3NlbGVjdCA3NSUgb2YgZGF0YSBhcyBzYW1wbGUgZnJvbSB0b3RhbCAnbicgcm93cyBvZiB0aGUgZGF0YSAgDQppbmRleGVzID0gc2FtcGxlLnNwbGl0KGRmJFksIFNwbGl0UmF0aW8gPSAwLjc1KQ0KI3NwbGl0IGRhdGEgaW50byB0ZXN0IGFuZCB0cmFpbg0KdHJhaW4gPSBzdWJzZXQoZGYsIGluZGV4ZXMgPT0gVFJVRSkNCnRlc3QgID0gc3Vic2V0KGRmLCBpbmRleGVzID09IEZBTFNFKQ0KI3JlbW92ZSB0aGUgaW5kZXggdmFyaWFibGUgZnJvbSBtZW1vcnkNCnJtKGluZGV4ZXMpDQpgYGANCg0KIyMgU2lnbW9pZCBGdW5jdGlvbg0KYGBge3J9DQojYmFzaWMgc2lnbW9pZCBmdW5jdGlvbg0Kc2lnbW9pZCA9IGZ1bmN0aW9uKHgpew0KICAxIC8gKDEgKyBleHAoLXgpKQ0KfQ0KYGBgDQoNCiNEYW5pZWwgVy4gQW5uZXIgTG9naXN0aWMgUmVncmVzc2lvbiBmdW5jdGlvbg0KYGBge3J9DQpMb2dpc3RpY19SZWdyZXNzaW9uPWZ1bmN0aW9uKHgseSkNCnsNCiAgI2NyZWF0ZSBhbiBpdGVyYWJsZSB2YXJpYWJsZSwgaQ0KICAjY3JlYXRlIG1heCBpdGVyYXRpb25zLCBuIA0KICAjY3JlYXRlIGEgYm9vbGVhbiB2YXJpYWJsZSB0byBkZXRlcm1pbmUgc3RvcHBhZ2UsIGNvbnZlcmdlZA0KICBpID0gMA0KICBuID0gMTAwDQogIGNvbnZlcmdlZCA9IEZBTFNFDQogICN0b2xlcmFuY2UgDQogIGFscGhhID0gMC4wMDENCiAgI2NyZWF0ZSBjb2VmZmljaWVudHMgdmFyIA0KICBjb2VmZmljaWVudHMgPSAxDQogICNzZXQgbWF0cml4IHdlaWdodHMgZXF1YWwgdG8gMSB0byBzdGFydCANCiAgI3NldCBkaW1lbnNpb24gb2YgdGhlIG1hdHJpeCANCiAgY29lZmZpY2llbnRzID0gbWF0cml4KGNvZWZmaWNpZW50cywgZGltKHgpWzJdKQ0KICANCiAgI3VwZGF0ZSB3ZWlnaHRzDQogICNsb29wIHdpbGwgc3RvcCB3aGVuIGNvbnZlcmdlZCBvciBpdGVyYXRpb25zICByZWFjaGVkICANCiAgd2hpbGUgKGkgPCBuICYgIWNvbnZlcmdlZCl7DQogICAgI3J1biB4IHZhbHVlcyBhbmQgY29lZmZpY2llbnRzIHRocm91Z2ggc2lnbW9pZCBmdW5jdGlvbg0KICAgIHByZWRpY3QgPC0gc2lnbW9pZCh4ICUqJSBjb2VmZmljaWVudHMpDQogICAgDQogICAgI3NldCB0aGUgZGlhZ29uYWxzIG9mIHRoZSBtYXRyaXggdG8gMA0KICAgIHByZWRpY3RfZGlhZyA9IGRpYWcocHJlZGljdFssMV0pDQogICAgDQogICAgI3VwZGF0ZSB3ZWlnaHRzDQogICAgI3NvbHZlKCkgd2lsbCAgZmluZCB0aGUgY29lZmZpY2llbnQgaW4gdGhlIGVxdWF0aW9uIA0KICAgICNhbHNvIGZpbmRzIHRoZSBpbnZlcnNlIG9mIGdpdmVuIG1hdHJpeA0KICAgICN3ZSB1c2UgdGhlIGNvZWZmaWNpZW50cyBpbiB0aGUgc29sdmUoKSBmdW5jdGlvbg0KICAgICN3aGljaCBmaW5kcyBhbiB1cGRhdGUgdG8gdGhlIGN1cnJlbnQgY29lZmZpY2llbnRzIA0KICAgIGNvZWZmaWNpZW50cyA9IGNvZWZmaWNpZW50cyArIHNvbHZlKHQoeCkgJSolIHByZWRpY3RfZGlhZyAlKiUgeCkgJSolIA0KICAgICAgdCh4KSAlKiUgKHkgLSBwcmVkaWN0KQ0KICAgIA0KICAgICNjb21wdXRlIG1lYW4gc3F1YXJlZCBlcnJvciB0byBjaGVjayBjb21wbGV0aW9uDQogICAgTVNFID0gbWVhbigoeSAtIHNpZ21vaWQoeCAlKiUgY29lZmZpY2llbnRzKSleMikNCiAgICANCiAgICAjaWYgbWVhbiBzcXVhcmVkIGVycm9yIGlzIGxlc3MgdGhhbiBhbHBoYSwgd2UgY2FuIHN0b3AgDQogICAgaWYgKE1TRSA8IGFscGhhKXsNCiAgICAgIGNvbnZlcmdlZCA9IFRSVUUNCiAgICB9DQogICAgaT1pKzEgI2l0ZXJhdGUgdGhlIGNvdW50DQogIH0NCiAgDQogIHByZWRpY3RlZCA9IHNpZ21vaWQoeCAlKiUgY29lZmZpY2llbnRzKQ0KICBjb25mbWF0cml4ID0gdGFibGUoQWN0dWFsID0geSwgUHJlZGljdGVkID0gcHJlZGljdGVkID4gMC41KQ0KICBjdXN0b21fbHJfYWNjdXJhY3kgPSAoc3VtKGRpYWcoY29uZm1hdHJpeCkpKSAvIChzdW0oY29uZm1hdHJpeCkpDQogIHByaW50KCdMb2dpc3RpYyBSZWdyZXNzaW9uIE1vZGVsIGNvZWZmaWNpZW50cycpDQogIHByaW50KGNvZWZmaWNpZW50cykNCiAgcHJpbnQoJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLScpDQogIHByaW50KCdMb2dpc3RpYyBSZWdyZXNzaW9uIE1vZGVsIENvbmZ1c2lvbiBNYXRyaXgnKQ0KICBwcmludCh0YWJsZShBY3R1YWwgPSB5LCBQcmVkaWN0ZWQgPSBzaWdtb2lkKHggJSolIGNvZWZmaWNpZW50cykgPiAwLjUpKQ0KICBwcmludCgnLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tJykNCiAgcHJpbnQoJ0xvZ2lzdGljIFJlZ3Jlc3Npb24gTW9kZWwgQWNjdXJhY3knKQ0KICBwcmludChjdXN0b21fbHJfYWNjdXJhY3kpDQogIHJldHVybiBjdXN0b21fbHJfYWNjdXJhY3kNCn0NCmBgYA0KDQojSW5pdGlhbCB4L3kgZGF0YSBhbmQgcnVubmluZyB0aGUgTG9naXN0aWNfUmVncmVzc2lvbiBmdW5jdGlvbg0KYGBge3J9DQojaW5zZXJ0IHgxIGFuZCB4MiB2YWx1ZXMgaW4gYSBtYXRyaXgNCnggPC0gYXMubWF0cml4KHRyYWluWzE6Ml0pDQojYWRkIGFuIGV4dHJhIHJvdyBvZiBhbGwgMSdzIGZvciBvdXIgbWF0cml4IG11bHRpcGxpY2F0aW9uIGxhdGVyDQp4IDwtIGNiaW5kKHgsIGludGVyY2VwdD0xKQ0KI2dldCB5IHZhbHVlcyBpbiBhIG1hdHJpeCANCnkgPC0gYXMubWF0cml4KHRyYWluWzNdKQ0KDQojUnVuIHRoZSBtb2RlbA0KY3VzdG9tX2xyX2FjY3VyYWN5IDwtIExvZ2lzdGljX1JlZ3Jlc3Npb24oeCx5KQ0KYGBgDQoNCiNSdW4gUidzIExvZ2lzdGljIFJlZ3Jlc3Npb24gZm9yIGNvbXBhcmlzb24NCmBgYHtyfQ0KI3Rlc3Qgd2l0aCBSJ3MgTG9naXN0aWMgUmVncmVzc2lvbg0KI1kgaXMgdGhlIHJlc3BvbnNlIHZhciBhbmQgWDEgYW5kIFgyIGFyZSB0aGUgcHJlZGljdG9yIHZhcnMNCiN1c2luZyBnZW5lcmFsaXplZCBsaW5lYXIgbW9kZWxzIFtnbG0oKV0gd2l0aCBmYW1pbHkgbGluayBhcyBiaW5vbWlhbA0KbW9kZWwgPC0gIGdsbShZfi4sIHRyYWluLCBmYW1pbHk9ImJpbm9taWFsIikNCg0KI3ByZWRpY3QoKSBmdW5jdGlvbiBwcmVkaWN0cyB0aGUgWSB2YXIgZnJvbSB0ZXN0IGRhdGEgdXNpbmcgWDEgYW5kIFgyIHZhcmlhYmxlcw0KcmVzdWx0cyA8LSAgcHJlZGljdChtb2RlbCwgdGVzdCwgdHlwZT0icmVzcG9uc2UiKQ0Kc3RyKHJlc3VsdHMpDQpgYGANCg0KI1IncyBDb25mdXNpb24gbWF0cml4IGZvciBjb21wYXJpc29uDQpgYGB7cn0NCiNjcmVhdGUgY29uZm1hdHJpeCwgd2Ugc2F2ZSB0aGlzIGFzIGEgdmFyIGJlY2F1c2Ugd2UgbmVlZCBpdCBmb3IgdGhlIGFjY3VyYWN5IGZ1bmN0aW9uIGxhdGVyDQpjb25mbWF0cml4IDwtIHRhYmxlKEFjdHVhbCA9IHRlc3QkWSwgUHJlZGljdGVkID0gcmVzdWx0cyA+IDAuNSkNCnByaW50KCdSIE1vZGVsIENvbmZ1c2lvbiBNYXRyaXgnKQ0KcHJpbnQoY29uZm1hdHJpeCkNCmBgYA0KDQojUidzIGFjY3VyYWN5IGZvciBjb21wYXJpc29uDQpgYGB7cn0NCnJfbHJfYWNjdXJhY3kgPC0gKChjb25mbWF0cml4WzFdICsgY29uZm1hdHJpeFs0XSkgLyBzdW0oY29uZm1hdHJpeCkpDQpwcmludChwYXN0ZSgnUiBtb2RlbCBhY2N1cmFjeTonLCByX2xyX2FjY3VyYWN5KSkgI2FjY3VyYWN5IGZ1bmN0aW9uDQpgYGANCg0KYGBge3J9DQppZihjdXN0b21fbHJfYWNjdXJhY3kgPiByX2xyX2FjY3VyYWN5KSB7DQogIHByaW50KHBhc3RlKCdXT08hIE91ciBmdW5jdGlvbiBpcyBNT1JFIGFjY3VyYXRlLiBXZSBhcmUgdXNpbmcgdGhlIHNlZWQ6Jywgc2VlZCkpDQp9IGVsc2Ugew0KICBwcmludChwYXN0ZSgnQXd3ISBPdXIgZnVuY3Rpb24gaXMgTEVTUyBhY2N1cmF0ZS4gV2UgYXJlIHVzaW5nIHRoZSBzZWVkOicsIHNlZWQpKQ0KfQ0KYGBgDQoNCg==</div>
 
 
 
