@@ -1,0 +1,10 @@
+stop the controller in the settings page (service stop unifi doesnt work as unifios restarts it)
+
+run these commands
+
+mkdir unifi-data
+mongod --dbpath /usr/lib/unifi/data/db --smallfiles --logpath /usr/lib/unifi/logs/server.log --journal --fork
+mongodump -o unifi-data/
+mongod --dbpath /usr/lib/unifi/data/db --smallfiles --logpath /usr/lib/unifi/logs/server.log --shutdown
+
+start the controller in the settings page
