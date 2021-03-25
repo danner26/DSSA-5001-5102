@@ -1,0 +1,14 @@
+stop the controller in the settings page (service stop unifi doesnt work as unifios restarts it)
+
+run these commands
+
+mkdir unifi-data
+mongod --dbpath /usr/lib/unifi/data/db --smallfiles --logpath /usr/lib/unifi/logs/server.log --journal --fork
+mongodump -o unifi-data/
+mongod --dbpath /usr/lib/unifi/data/db --smallfiles --logpath /usr/lib/unifi/logs/server.log --shutdown
+
+start the controller in the settings page
+
+
+https://help.ui.com/hc/en-us/articles/360006634094-UniFi-Network-Controller-Repairing-Database-Issues-on-the-UniFi-Controller
+https://rmoff.net/2018/03/27/cloning-ubiquitis-mongodb-instance-to-a-separate-server/
