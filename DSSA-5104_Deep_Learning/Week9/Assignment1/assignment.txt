@@ -1,0 +1,5 @@
+Prepare a Python code using Keras to solve our toy problem.
+As always document your code with comments.
+Run the model for different numbers of Epochs: 150,500,1500
+Plot graphs of accuracy and loss versus epoch number for these three cases.
+Create an interesting visualization showing how well your model performed by plotting predictions versus observed targets.
