@@ -1,0 +1,28 @@
+Perform a detailed Principal Component Analysis of provided soccer data. For more information,
+
+See https://www.kaggle.com/thec03u5/fifa-18-demo-player-dataset for data and column headings
+See also https://blog.exploratory.io/an-introduction-to-principal-component-analysis-pca-with-2018-world-soccer-players-data-810d84a14eab
+
+Explore the data in R with scatter plots or histograms or other graphs
+
+
+What questions would you like to answer with this data? Player position?
+
+
+Choose appropriate features for your PCA
+
+
+Perform a Principal Component Analysis in R
+
+
+Create a Scree Plot in R and choose an appropriate number of principal components
+
+
+Select an appropriate subset of the features from the original variables
+
+
+Discuss how well (or poorly) you think these new components and features represent the data
+
+
+
+The main requirements are that you do a Principal Component Analysis and provide a discussion of what you did and found. Other than that, you are free to explore the dataset as you see fit.
