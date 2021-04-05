@@ -1,0 +1,177 @@
+---
+title: "PCA_DanielWAnner"
+author: "Daniel W. Anner"
+date: "4/5/2021"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library("FactoMineR")
+library("factoextra")
+```
+
+```{r}
+setwd("E:/_Source/Stockton-DSSA/DSSA-5201_Machine_Learning_Fundamentals/PCA")
+data <- read.csv("data.csv", header = TRUE)
+getwd()
+```
+
+```{r}
+#what team has the most players
+table = table(data$Nationality)
+t = as.data.frame(table)
+t
+```
+```{r}
+England <- filter(data, Nationality %in% c("England")) %>% select(Nationality, Position)
+England
+table = table('Position' = England$Position)
+t = as.data.frame(table)
+England <- t %>% mutate(Nationality="England")
+England
+```
+
+```{r}
+#nationality by Position in R
+England <- filter(data, Nationality %in% c("England")) %>% select(Nationality, Position)
+table = table('Position' = England$Position)
+t = as.data.frame(table)
+England <- t %>% mutate(Nationality="England")
+
+Germany <- filter(data, Nationality %in% c("Germany")) %>% select(Nationality, Position)
+table = table('Position' = Germany$Position)
+t = as.data.frame(table)
+Germany <- t %>% mutate(Nationality="Germany")
+
+Spain <- filter(data, Nationality %in% c("Spain")) %>% select(Nationality, Position)
+table = table('Position' = Spain$Position)
+t = as.data.frame(table)
+Spain <- t %>% mutate(Nationality="Spain")
+
+France <- filter(data, Nationality %in% c("France")) %>% select(Nationality, Position)
+table = table('Position' = France$Position)
+t = as.data.frame(table)
+France <- t %>% mutate(Nationality="France")
+
+Argentina <- filter(data, Nationality %in% c("Argentina")) %>% select(Nationality, Position)
+table = table('Position' = Argentina$Position)
+t = as.data.frame(table)
+Argentina <- t %>% mutate(Nationality="Argentina")
+
+Brazil <- filter(data, Nationality %in% c("Brazil")) %>% select(Nationality, Position)
+table = table('Position' = Brazil$Position)
+t = as.data.frame(table)
+Brazil <- t %>% mutate(Nationality="Brazil")
+
+df <- rbind(England, Germany, Spain, France, Argentina, Brazil)
+ggplot(df, aes(Nationality, Freq)) + geom_bar(stat = "identity", aes(fill = Position), position = "dodge")
+```
+
+```{r}
+#check for NA's
+any(is.na(data))
+#remove NA's this is typically bad and should not be done
+#removing NA Values should be replaced with the mean to help with variance 
+#however it was easier to just remove them since the focus of this is on PCA 
+data<-na.omit(data)
+#NA values removed 
+any(is.na(data))
+dim(data)
+#18147 observations     
+#89 variables
+```
+
+
+```{r}
+datapca <- data[55:83]
+#head the data 
+head(datapca)
+#set seed
+set.seed(123)
+#apply pca using prcomp 
+fifaprcomp <- prcomp(datapca, center = TRUE, scale. = TRUE)
+summary(fifaprcomp)
+```
+
+```{r}
+screeplot(fifaprcomp, type = "lines")
+```
+
+From the scree plot we can see that 2-3 Components contain most the variance 
+
+Importance of components:
+                          PC1    PC2     PC3     PC4     PC5     PC6     PC7     PC8     PC9    PC10    PC11    PC12    PC13
+Standard deviation     3.9439 2.1836 1.39835 1.16779 1.00370 0.78733 0.62602 0.59372 0.54798 0.52450 0.49222 0.47404 0.47106
+Proportion of Variance 0.5363 0.1644 0.06743 0.04703 0.03474 0.02138 0.01351 0.01216 0.01035 0.00949 0.00835 0.00775 0.00765
+Cumulative Proportion  0.5363 0.7008 0.76819 0.81522 0.84996 0.87133 0.88485 0.89700 0.90736 0.91684 0.92520 0.93295 0.94060
+                          PC14   PC15   PC16   PC17   PC18    PC19    PC20    PC21    PC22    PC23    PC24    PC25    PC26
+Standard deviation     0.44940 0.4474 0.4171 0.3847 0.3690 0.35484 0.34842 0.33056 0.30846 0.28871 0.26868 0.26126 0.25519
+Proportion of Variance 0.00696 0.0069 0.0060 0.0051 0.0047 0.00434 0.00419 0.00377 0.00328 0.00287 0.00249 0.00235 0.00225
+Cumulative Proportion  0.94756 0.9545 0.9605 0.9656 0.9703 0.97460 0.97879 0.98256 0.98584 0.98871 0.99120 0.99356 0.99580
+                          PC27    PC28    PC29
+Standard deviation     0.24777 0.19333 0.15166
+Proportion of Variance 0.00212 0.00129 0.00079
+Cumulative Proportion  0.99792 0.99921 1.00000
+
+First three components show 53.63% on the first 70.08% on the second and 76.81% 
+on the third. We can narrow down our components from the original dataset to the first 2 principal components. 
+
+
+
+```{r}
+fifaprcomp$rotation[,1:3]
+```
+
+Using the first two PCA's we can look at what variables contribute the most to Principal Components. We need to see what data contributes the most to the first Principal Component. 
+
+```{r}
+contrib <- fifaprcomp$rotation[,1] / sum(fifaprcomp$rotation[,1])
+head(contrib[order(-contrib)])
+```
+Looks like Ball Control is the data that contributes the most to the first Principal Component. 
+
+```{r}
+contrib <- fifaprcomp$rotation[,2] / sum(fifaprcomp$rotation[,2])
+head(contrib[order(-contrib)])
+```
+For the second component Sliding Tackle contributes the most. 
+
+```{r}
+contrib <- fifaprcomp$rotation[,3] / sum(fifaprcomp$rotation[,3])
+head(contrib[order(-contrib)])
+```
+
+and for the third it is strength however the contribution is way off at 4.97 compared to others that are 0.36 and 0.04. No idea why it is over 1 or 0.99 since it is a percentage?
+
+
+```{r}
+fifapca <- PCA(datapca, scale.unit = TRUE, ncp = 5, graph = TRUE)
+```
+
+The function PCA() returns calculations not inherent to prcomp()
+
+```{r}
+print(fifapca)
+```
+
+
+```{r}
+fifapca$eig
+```
+
+The eigenvalues show the magnitude of the eigenvectors. The variance percentages of each comp are listed top 3 being: 15.554, 4.76, 1.955 with percentage of variance being 53.63, 16.44, 6.74 so with all those features the dataset has we are able to narrow down with high variance to 3 components 
+```{r}
+fviz_contrib(fifapca, choice = "var", sort.val = c("desc"), axes = 1, top = 5)
+```
+
+Making a graph to show the contribution % of the top 5 variables shows that Ball Control has a strong contribution percentage for the first Component
+```{r}
+fviz_contrib(fifapca, choice = "var", sort.val = c("desc"), axes = 2, top = 5)
+```
+
+The second component shows Sliding Tackles and Standing Tackles as very high contributing variables. 
+```{r}
+fviz_contrib(fifapca, choice = "var", sort.val = c("desc"), axes = 3, top = 5)
+```
+and for the third component Strength is a strong contributor. 
