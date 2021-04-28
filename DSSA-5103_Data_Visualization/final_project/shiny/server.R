@@ -24,45 +24,67 @@ library(mapproj)
 library(ggpubr)
 library(ggpmisc)
 library(ggrepel)
+library(measurements)
 
 #thematic::thematic_shiny(font = "auto")
+
+# Ref: https://5harad.com/mse125/r/visualization_code.html
+addUnits <- function(n) {
+    labels <- ifelse(n < 1000, n,  # less than thousands
+                     ifelse(n < 1e6, paste0(round(n/1e3), 'k'),  # in thousands
+                            ifelse(n < 1e9, paste0(round(n/1e6), 'M'),  # in millions
+                                   ifelse(n < 1e12, paste0(round(n/1e9), 'B'), # in billions
+                                          ifelse(n < 1e15, paste0(round(n/1e12), 'T'), # in trillions
+                                                 'too big!'
+                                          )))))
+    return(labels)
+}
+
+getLog10 <- function(n) {
+    value <- ifelse(n == 0, 0, log10(n))
+}
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     # Only need to run this if you want to have the editor appear and allow testing of pallettes
     #bs_themer()
 
-    beedata <- NULL
-        
+    beedata <- read_csv("./HoneyBees.csv")
+    
+    output$select_field <- renderUI({
+        states_to_select <- beedata %>% group_by(StateName) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% slice(1) %>% select(StateName)
+        selectInput("stateSelection",
+            "States to Evaluate:",
+            choices = states_to_select, 
+            multiple = TRUE)
+    })
+    
     ####################
     # Logic for the main plot
     output$mainPlot <- renderPlot({
-        # Import the strava activities file provided by User
-        beedata <- read_csv("./HoneyBees.csv")
-
-        # So errors dont come up prior to the user importing their file
-        #req(beedata)
         
-        # Since input file gives the metadata for the file, need to actually read in the data from the datapath var
-        #beedata <- read.csv(beedata$datapath)
         
-        ##########
-        # parse the activity date
-        #beedata$Activity.Date <- as.Date(strava$Activity.Date, format="%b %d, %Y, %I:%M:%S %p")
-        
-        ##########
-        # filter the activities data dynamically based on the data
-        plot <- filter(beedata, 
-                     year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>%
-            ggplot()
         ##########
         # series of if statements to dynamically add components to the ggplot based on which variables the user selects with the checkboxes
         print(input$mainLegend)
-        if('avg_pest_used' %in% input$mainLegend){
+        if(!is.null(input$stateSelection)) {
+            print(input$stateSelection)
+            beedata <- beedata %>% group_by(StateName) %>% filter(StateName == input$stateSelection)
+        }
+        if('total_pest_used' %in% input$mainLegend){
             total_pest_by_year <- beedata %>% group_by(state) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% mutate(nAllNeonic=sum(nAllNeonic, na.rm = TRUE)) %>% slice(1) %>% select(state, nAllNeonic)
             
             
-            plot <- ggplot(total_pest_by_year, aes(state, nAllNeonic)) + geom_bar(stat="identity") + stat_summary(fun.data=mean_cl_normal) + geom_smooth(method='lm', formula= y~x, color="black") +  scale_y_continuous(label=addUnits)
+            plot <- ggplot(total_pest_by_year, aes(state, nAllNeonic)) + geom_bar(stat="identity", color = "#ff0000", fill = "#FF6666") + stat_summary(fun.data=mean_cl_normal) + geom_smooth(method='lm', formula= y~x, color="black") +  scale_y_continuous(label=addUnits)
+            
+            plot <- plot + 
+                labs(
+                    title = "Total Pesticide Used",
+                    subtitle = "Amount of pesticides used in pounds.",
+                    caption = paste(c("Between the years of", lubridate::year(input$dateRange[1]), "and", lubridate::year(input$dateRange[2])), collapse = " ")
+                ) +
+                xlab("State") +
+                ylab("Pounds of Pesticide")
         }
         if('total_all_neonic_map' %in% input$mainLegend){
             beedata_latest <- beedata %>% group_by(state) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% mutate(nAllNeonic = (2.2 * nAllNeonic)) %>% mutate(nAllNeonic = coalesce(nAllNeonic, 0)) %>% select(state, StateName, year, nAllNeonic, totalprod)
@@ -120,77 +142,48 @@ shinyServer(function(input, output) {
                 labs(x = "", y = "", title = "Honey Produced Per State", subtitle = "Normalized with log10") + theme(legend.position = "bottom", 
                                                                                                                      panel.background = element_blank())
         }
-        #if('Distance' %in% input$mainLegend){
-        #    sp <- sp + geom_line(aes(Activity.Date, Distance), color="Green")
-        #}
-        #if('Elevation' %in% input$mainLegend){
-        #    sp <- sp + geom_line(aes(Activity.Date, Elevation.Gain), color='Red')
-        #}
+        if('total_honey_prod' %in% input$mainLegend){
+            total_honey_prod <- beedata %>% group_by(state) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% mutate(totalprod=sum(totalprod, na.rm = TRUE)) %>% slice(1) %>% select(state, totalprod)
+            
+            
+            plot <- ggplot(total_honey_prod, aes(state, totalprod)) + geom_bar(stat="identity", fill='gold', color='yellow') + stat_summary(fun.data=mean_cl_normal) + geom_smooth(method='lm', formula= y~x, color="black") +  scale_y_continuous(label=addUnits)
+            
+            plot <- plot + 
+                labs(
+                    title = "Total Honey Produced",
+                    subtitle = "Amount of honey produces in pounds.",
+                    caption = paste(c("Between the years of", lubridate::year(input$dateRange[1]), "and", lubridate::year(input$dateRange[2])), collapse = " ")
+                ) +
+                xlab("State") +
+                ylab("Pounds of Honey")
+        }
+        if('pest_vs_honey' %in% input$mainLegend){
+            total_pest_by_year <- beedata %>% group_by(state) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% mutate(nAllNeonic=conv_unit(sum(nAllNeonic, na.rm = TRUE), 'kg', 'lbs')) %>% slice(1) %>% select(state, nAllNeonic)
+            total_honey_prod <- beedata %>% group_by(state) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% mutate(totalprod=sum(totalprod, na.rm = TRUE)) %>% slice(1) %>% select(state, totalprod)
+            total_honey_and_pest <- left_join(total_pest_by_year, total_honey_prod, by = c("state" = "state"))
+            
+            plot <- ggplot(total_honey_and_pest, aes(x=state)) + geom_bar(aes(y=totalprod), stat="identity", position="identity", alpha=.3, fill='gold', color='yellow') +
+                    geom_bar(aes(y=nAllNeonic), stat="identity", position="identity", alpha=.8, color = "#ff0000", fill = "#FF6666") +  scale_y_continuous(label=addUnits)
+            
+            plot <- plot + 
+                labs(
+                    title = "Total Pesticide Used VS Total Honey Produced",
+                    subtitle = "Amount of pesticides used compared to honey produced in pounds.",
+                    caption = paste(c("Between the years of", lubridate::year(input$dateRange[1]), "and", lubridate::year(input$dateRange[2])), collapse = " ")
+                ) +
+                xlab("State") +
+                ylab("Pounds")
+        }
 
         ##########
         # Some formatting to be done to the plot regardless of which variables are selected
         plot + 
-            labs(
-                title = "Pesticide Used",
-                subtitle = "Subtitle test",
-                caption = "Caption test"
-            ) +
-            xlab("Activity Date") +
-            ylab("")
+            theme(
+                plot.title = element_text( size = 14),    # Center title position and size
+                plot.subtitle = element_text(size = 12),            # Center subtitle
+                plot.caption = element_text(size = 20, face = "italic")# move caption to the left
+            )
             
     })
-    
-    ####################
-#    output$indoor_vs_outdoor_plot <- renderPlot({
-        # 
 
-#        req(strava)
-#    })
-    
-    ####################
-    #output$avg_watts_snapshot <- renderText({
-    #    
-
-#        req(strava)
-        
-        # Just making the snapshot widget dynamically filtered by the date
-#        avg_ftp <- filter(strava,
-#                          Activity.Date >= date(input$dateRange[1]) & Activity.Date < date(input$dateRange[2])
-#            )
-        
-        #avg_ftp$avg_ftp[is.na(avg_ftp$avg_ftp)] <- 0
-#        avg_ftp <- mean(avg_ftp$avg_ftp, 
-#                        na.rm = TRUE)
-#    })
-    
-    ####################
-#    observe({
-#        if(input$delete_data){
-#            # Delete the three data frames of the imported dataset
-#            remove(strava_data)
-#            remove(strava)
-#            remove(sp)
-            
-            # Reset the widgets that cached the data frames
-#            output$avg_watts_snapshot <- NULL
-#            output$avg_dist_snapshot <- NULL
-#            output$avg_ele_snapshot <- NULL
-#            output$avg_dur_snapshot <- NULL
-#            output$avg_cad_snapshot <- NULL
-#            output$mainPlot <- NULL
-#            output$indoor_vs_outdoor_plot <- NULL
-            
-            # Otherwise errors will be thrown
-#            strava <- NULL
-            
-            # Notify the User their data has been cleared
-#            showModal(modalDialog(
-#                title="Attention!",
-#                "Your Strava 'Activities.csv' file has been deleted from memory.",
-#                easyClose=TRUE
-#            ))
-#        }
-#    })
 })
-
-#remove(a, x, t, test, total_dist, main_byDate, main_legend, mainLegend, sp, strava)

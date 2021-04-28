@@ -19,6 +19,7 @@ library(mapproj)
 library(ggpubr)
 library(ggpmisc)
 library(ggrepel)
+library(measurements)
 setwd("E:/_Source/Stockton-DSSA/DSSA-5103_Data_Visualization/final_project")
 ```
 
@@ -54,16 +55,19 @@ getLog10 <- function(n) {
 ```
 
 ```{r}
-plot <- filter(beedata, 
-                     year >= 1970 & year <= 2020) %>%
-            ggplot()
-
-
-total_pest_by_year <- beedata %>% group_by(state) %>% filter(year >= 2008 & year <= 2020) %>% mutate(nAllNeonic=sum(nAllNeonic, na.rm = TRUE)) %>% slice(1) %>% select(state, nAllNeonic)
-
-
-plot <- ggplot(total_pest_by_year, aes(state, nAllNeonic)) + geom_bar(stat="identity") + stat_summary(fun.data=mean_cl_normal) + geom_smooth(method='lm', formula= y~x, color="black") +  scale_y_continuous(label=addUnits)
-plot
+total_pest_by_year <- beedata %>% group_by(state) %>% filter(year >= 1994 & year <= 2008) %>% mutate(nAllNeonic=conv_unit(sum(nAllNeonic, na.rm = TRUE), 'kg', 'lbs')) %>% select(state, nAllNeonic)
+            total_pest_by_year
+            
+            plot <- ggplot(total_pest_by_year, aes(state, nAllNeonic)) + geom_bar(stat="identity") + stat_summary(fun.data=mean_cl_normal) + geom_smooth(method='lm', formula= y~x, color="black") +  scale_y_continuous(label=addUnits)
+            
+            plot + 
+                labs(
+                    title = "Total Pesticide Used",
+                    subtitle = "Count of all Neonic Pesticides used",
+                    caption = paste(c("Between the year of", lubridate::year(input$dateRange[1]), "and", lubridate::year(input$dateRange[2])), collapse = " ")
+                ) +
+                xlab("State") +
+                ylab("Pounds")
 
 
   
@@ -71,6 +75,7 @@ plot
 
 ```{r, fig.width = 12}
 single_totals_over_all_years <- beedata %>% group_by(state) %>% transmute(totalprod=sum(totalprod)) %>% slice(1)
+single_totals_over_all_years
 
 totalprod_state_production <- ggplot(single_totals_over_all_years, aes(x=state, y=totalprod, label = single_totals_over_all_years$state)) + 
   geom_point() + 
@@ -130,26 +135,7 @@ na.omit(beedata_latest)
 USA <- map_data("state")
 
 #Total honey production map
-totalprod_plot <- ggplot(beedata_latest) + 
-  geom_map(map = fifty_states, aes(map_id = str_to_lower(StateName), fill = getLog10(totalprod))) + 
-  labs(fill = "Total Production (lbs)" ) + 
-  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
-  borders("state") +
-  coord_map() +
-  geom_text(
-    data = fifty_states %>%
-      group_by(id) %>%
-      summarise(lat = mean(c(max(lat), min(lat))),
-                long = mean(c(max(long), min(long)))) %>%
-      mutate(state = id) %>%
-      left_join(beedata_latest, by = c("state" = "state")),
-    aes(x = long, y = lat, label = getLog10(totalprod) )
-    ) +
-  scale_fill_gradient(low="#22c1c3", high="#fdd42d") +
-  scale_x_continuous(breaks = NULL) +
-  scale_y_continuous(breaks = NULL) +
-  labs(x = "", y = "", title = "Honey Produced Per State", subtitle = "Normalized with log10") + theme(legend.position = "bottom", 
-                               panel.background = element_blank())
+totalprod_plot <-
 #Total Pesticide used map
 allneonic_plot <- ggplot(beedata_latest) +
   geom_map(map = fifty_states, aes(map_id = str_to_lower(StateName), fill = getLog10(nAllNeonic))) +

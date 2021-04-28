@@ -8,21 +8,19 @@
 #
 
 library(shiny)
-#thematic::thematic_shiny(font = "auto")
+thematic::thematic_shiny(font = "auto")
 library(bslib)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
     # Load theme
     theme = bs_theme(bootswatch = "darkly"),
+    tags$head(tags$style('body {color:#FFD700; font-size: 15px;}')),
 
     # Application title
-    titlePanel("US Honey & Pesticides"),
-
-
+    titlePanel("US Honey & Pesticide Data"),
     
-    ####################
-    # Split between the main plot and radio buttons on the right to toggle features
+    #Right side toggles (radio buttons)
     fluidRow(
         column(
                width = 10,
@@ -30,24 +28,17 @@ shinyUI(fluidPage(
         column(
                width = 2,
                radioButtons("mainLegend", "Graph Type:",
-                            c('Pesticide Used'='avg_pest_used',  'Pesticide Used Map'='total_all_neonic_map', 'Total Honey Prod Map'='total_honey_prod_map')))
+                            c('Pesticide Used'='total_pest_used', 'Total Honey Production'='total_honey_prod', 'Pesticide Used VS Honey Production'='pest_vs_honey', 'Pesticide Used Map'='total_all_neonic_map', 'Total Honey Prod Map'='total_honey_prod_map')))
     ),
     
-    
-    ####################
-    # The date range widget, dynamically effects all other widgets
+    #Date Range (using decades to only show years)
+    #TODO: Find a way to make selection only for year
     fluidRow(
         column(6,
                dateRangeInput("dateRange",
                               "Date Range:",
                               start = "1995-01-01",
-                              startview="decade", format="yyyy"))
-    ),
-    
-    ####################
-    # The Indoor vs Outdoor Speed plot
-    #fluidRow(
-    #    column(12,
-    #           plotOutput('indoor_vs_outdoor_plot'))
-    #)
+                              startview="decade", format="yyyy")),
+        column(6, uiOutput('select_field'))
+    )
 ))
