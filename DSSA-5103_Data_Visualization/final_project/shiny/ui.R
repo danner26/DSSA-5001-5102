@@ -35,10 +35,7 @@ shinyUI(fluidPage(
     #TODO: Find a way to make selection only for year
     fluidRow(
         column(6,
-               dateRangeInput("dateRange",
-                              "Date Range:",
-                              start = "1995-01-01",
-                              startview="decade", format="yyyy")),
+               uiOutput('date_selection')),
         column(6, uiOutput('select_field'))
     )
 ))

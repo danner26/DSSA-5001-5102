@@ -7,8 +7,7 @@
 #    http://shiny.rstudio.com/
 #
 
-library(devtools)
-install_github("wmurphyrd/fiftystater")
+devtools::install_github("wmurphyrd/fiftystater")
 
 library(rsconnect)
 library(shiny)
@@ -51,12 +50,26 @@ shinyServer(function(input, output) {
 
     beedata <- read_csv("./HoneyBees.csv")
     
+    output$date_selection <- renderUI({
+        start <- paste(c(min(beedata %>% group_by(year) %>% slice(1) %>% select(year)), "-01-01"), collapse = "")
+        end <- paste(c(max(beedata %>% group_by(year) %>% slice(1) %>% select(year)), "-12-31"), collapse = "")
+        print(end)
+        dateRangeInput("dateRange",
+                       "Date Range:",
+                       start = start,
+                       end = end,
+                       min = start,
+                       max = end,
+                       startview="decade", format="yyyy")
+    })
+    
     output$select_field <- renderUI({
         states_to_select <- beedata %>% group_by(StateName) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% slice(1) %>% select(StateName)
         selectInput("stateSelection",
-            "States to Evaluate:",
-            choices = states_to_select, 
-            multiple = TRUE)
+                    "States to Evaluate:",
+                    choices = states_to_select, 
+                    multiple = TRUE)
+        
     })
     
     ####################

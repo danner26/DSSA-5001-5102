@@ -55,6 +55,11 @@ getLog10 <- function(n) {
 ```
 
 ```{r}
+max(beedata %>% group_by(year) %>% slice(1) %>% select(year))
+```
+
+
+```{r}
 total_pest_by_year <- beedata %>% group_by(state) %>% filter(year >= 1994 & year <= 2008) %>% mutate(nAllNeonic=conv_unit(sum(nAllNeonic, na.rm = TRUE), 'kg', 'lbs')) %>% select(state, nAllNeonic)
             total_pest_by_year
             
