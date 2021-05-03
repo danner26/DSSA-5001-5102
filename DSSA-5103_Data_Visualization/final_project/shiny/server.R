@@ -44,7 +44,7 @@ getLog10 <- function(n) {
 }
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
     # Only need to run this if you want to have the editor appear and allow testing of pallettes
     #bs_themer()
 
@@ -74,8 +74,8 @@ shinyServer(function(input, output) {
     
     ####################
     # Logic for the main plot
-    output$mainPlot <- renderPlot({
-        
+    output$mainPlot <- renderPlot(execOnResize = TRUE, {
+        width = session$clientData[["output_mainPlot_width"]]
         
         ##########
         # series of if statements to dynamically add components to the ggplot based on which variables the user selects with the checkboxes
@@ -93,11 +93,11 @@ shinyServer(function(input, output) {
             plot <- plot + 
                 labs(
                     title = "Total Pesticide Used",
-                    subtitle = "Amount of pesticides used in pounds.",
                     caption = paste(c("Between the years of", lubridate::year(input$dateRange[1]), "and", lubridate::year(input$dateRange[2])), collapse = " ")
                 ) +
                 xlab("State") +
-                ylab("Pounds of Pesticide")
+                ylab("Pounds of Pesticide") +
+                theme(text=element_text(size=15 / 900 * width), axis.text.x = element_text(angle = 60, hjust = 1))
         }
         if('total_all_neonic_map' %in% input$mainLegend){
             beedata_latest <- beedata %>% group_by(state) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% mutate(nAllNeonic = (2.2 * nAllNeonic)) %>% mutate(nAllNeonic = coalesce(nAllNeonic, 0)) %>% select(state, StateName, year, nAllNeonic, totalprod)
@@ -164,11 +164,11 @@ shinyServer(function(input, output) {
             plot <- plot + 
                 labs(
                     title = "Total Honey Produced",
-                    subtitle = "Amount of honey produces in pounds.",
                     caption = paste(c("Between the years of", lubridate::year(input$dateRange[1]), "and", lubridate::year(input$dateRange[2])), collapse = " ")
                 ) +
                 xlab("State") +
-                ylab("Pounds of Honey")
+                ylab("Pounds of Honey") +
+                theme(text=element_text(size=15 / 900 * width), axis.text.x = element_text(angle = 60, hjust = 1))
         }
         if('pest_vs_honey' %in% input$mainLegend){
             total_pest_by_year <- beedata %>% group_by(state) %>% filter(year >= lubridate::year(input$dateRange[1]) & year <= lubridate::year(input$dateRange[2])) %>% mutate(nAllNeonic=conv_unit(sum(nAllNeonic, na.rm = TRUE), 'kg', 'lbs')) %>% slice(1) %>% select(state, nAllNeonic)
@@ -181,11 +181,11 @@ shinyServer(function(input, output) {
             plot <- plot + 
                 labs(
                     title = "Total Pesticide Used VS Total Honey Produced",
-                    subtitle = "Amount of pesticides used compared to honey produced in pounds.",
                     caption = paste(c("Between the years of", lubridate::year(input$dateRange[1]), "and", lubridate::year(input$dateRange[2])), collapse = " ")
                 ) +
                 xlab("State") +
-                ylab("Pounds")
+                ylab("Pounds") +
+                theme(text=element_text(size=15 / 900 * width), axis.text.x = element_text(angle = 60, hjust = 1))
         }
 
         ##########
